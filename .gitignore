@@ -1,0 +1,10 @@
+# vsc settings folder
+.vscode/
+
+# build files
+*.class
+*.jar
+*.log
+
+# batch files
+*.bat
