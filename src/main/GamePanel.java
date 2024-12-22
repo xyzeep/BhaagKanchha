@@ -55,60 +55,73 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
     @Override
     // public void run() {
 
-    //     double drawInterval = 1000000000/FPS; // 1 bn nanosecs = 1 sec.. this means we draw the screen every 0.016666 secs so we can draw the screen 60 times/sec
-    //     double nextDrawTime = System.nanoTime() + drawInterval;
+    // double drawInterval = 1000000000/FPS; // 1 bn nanosecs = 1 sec.. this means
+    // we draw the screen every 0.016666 secs so we can draw the screen 60 times/sec
+    // double nextDrawTime = System.nanoTime() + drawInterval;
 
+    // while (gameThread != null) {
 
+    // long currentTime = System.nanoTime(); // Returns the current value of the
+    // JVM's high-res time, in nano secs
+    // // we could've also used milisecs but nano is more precise
 
-    //     while (gameThread != null) {
-
-
-    //         long currentTime = System.nanoTime(); // Returns the current value of the JVM's high-res time, in nano secs
-    //         // we could've also used milisecs but nano is more precise
-            
-
-    //         // 1. UPDATE: update information such as payer position
-    //         update();
-    //         // 2. DRAW: draw the screen with the updated information
-    //         repaint(); // it might be a bit confusing but this is how we call the paintComponent()
-    //                    // method
-    //     }
+    // // 1. UPDATE: update information such as payer position
+    // update();
+    // // 2. DRAW: draw the screen with the updated information
+    // repaint(); // it might be a bit confusing but this is how we call the
+    // paintComponent()
+    // // method
     // }
-
+    // }
 
     public void run() {
         // usign the delta/accumulator method to implement FPS
-        double drawInterval = 1000000000/FPS;
+        double drawInterval = 1000000000 / FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
+        long timer = 0;
+        int drawCount = 0;
 
         while (gameThread != null) {
 
+            // we check the current time in the beginning of the loop
             currentTime = System.nanoTime();
-            
-            delta += (currentTime - lastTime ) / drawInterval;
 
+            // we subtract the lastTime from currentTime so that we can know how much time
+            // has passed and divide it by drawInterval
+            delta += (currentTime - lastTime) / drawInterval;
+
+            timer += (currentTime - lastTime); // in every loop we add how much time has passed
+
+            // and the currentTime becomes lastTime
             lastTime = currentTime;
 
+            // ########### to be honest, rn i have no idea how this delta method woks. i
+            // will figure it out soon i promise
             if (delta >= 1) {
                 update();
                 repaint();
                 delta--;
+                drawCount++; // whenever the screen is repainted, the drawCounrter increases by 1
             }
 
-           
+            if (timer >= 1000000000) {
+                System.out.println("FPS: " + drawCount); // to check id the function is working properly(i.e. if the
+                                                         // game is running in 60 FPS)
+                drawCount = 0;
+                timer = 0;
+            }
         }
     }
 
-    
     public void update() {
 
         if (keyH.upPressed == true) {
             playerY -= playerSpeed;
         }
 
-        if(keyH.downPressed == true) {
+        if (keyH.downPressed == true) {
             playerY += playerSpeed;
         }
 
