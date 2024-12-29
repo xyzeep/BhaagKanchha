@@ -1,0 +1,10 @@
+# folders
+.settings/
+bin/
+
+# files
+buildandrun.bat
+*.class
+*.jar
+*.log
+
