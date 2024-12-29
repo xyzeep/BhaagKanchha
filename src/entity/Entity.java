@@ -3,7 +3,6 @@ package entity;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-
 public class Entity {
     
     public int worldX, worldY; //players/entity's postition in the world map
@@ -16,4 +15,5 @@ public class Entity {
     public int spriteNum = 1;
     public Rectangle solidArea; // the actual colliding part
     public boolean collisionOn = false;
+    
 }

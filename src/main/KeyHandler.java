@@ -7,10 +7,9 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
                                                  // events(keystrokes)
 
     public boolean upPressed;
-
+    
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
@@ -19,8 +18,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 
         if (code == KeyEvent.VK_W) {
             upPressed = true;
-        }
-
+        
     }
 
     @Override

@@ -10,6 +10,7 @@ public class CollisionCheckerPlayer {
 		this.gp = gp;
 	}
 
+	// function to check if the tile around the player has collision
 	public void checkTile(Player player) {
 
 		int playerLeftWorldX = player.worldX + player.solidArea.x;
@@ -24,8 +25,7 @@ public class CollisionCheckerPlayer {
 
 		int tileNum1, tileNum2, tileNum3, tileNum4; // tileNum1 and tileNum2 are for up and down directions. tileNum3
 													// and tileNum4 are for right side tiles
-
-		playerRightCol = (playerRightWorldX + player.speed) / gp.tileSize;
+		playerRightCol = (playerRightWorldX + player.speed + 5) / gp.tileSize;
 		tileNum3 = gp.tileM.mapTileNum[playerRightCol][playerTopRow];
 		tileNum4 = gp.tileM.mapTileNum[playerRightCol][playerBottomRow];
 		if (gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
@@ -35,6 +35,7 @@ public class CollisionCheckerPlayer {
 
 		switch (player.direction) {
 		case "up":
+			playerRightCol = playerRightWorldX / gp.tileSize;
 			playerTopRow = (playerTopScreenY - player.jumpSpeed + 5) / gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[playerLeftCol][playerTopRow];
 			tileNum2 = gp.tileM.mapTileNum[playerRightCol][playerTopRow];
@@ -45,6 +46,7 @@ public class CollisionCheckerPlayer {
 
 			break;
 		case "down":
+			playerRightCol = playerRightWorldX / gp.tileSize;
 			playerBottomRow = (playerBottomScreenY + player.jumpSpeed) / gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[playerLeftCol][playerBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[playerRightCol][playerBottomRow];

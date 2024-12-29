@@ -13,6 +13,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 															// as a game screen
 	// our class has to implement runnable for us to be able to use a Thread. It has
 	// a single method, run(), where we write the code for the task.
+	
 	// Screen settigns
 	final int originalTileSize = 16; // 16 x 16 tiles
 	final int scale = 3; // 3x zoom for the tiles
