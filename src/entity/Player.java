@@ -16,8 +16,9 @@ public class Player extends Entity {
 	KeyHandler keyH;
 	public BufferedImage run1, run2, jump1, jump2;
 	public int jumpSpeed = 7;
+	public boolean leftCollision;
 	private boolean isJumping = false;
-	public  boolean canJump; // if this is true the player is touching the ground
+	public boolean canJump; // if this is true the player is touching the ground
 	private int jumpCounter = 0;
 
 	public final int screenX;
@@ -32,8 +33,8 @@ public class Player extends Entity {
 		screenX = gp.tileSize * 3;
 		screenY = (gp.tileSize * 5) + 15;
 
-		solidArea = new Rectangle(0, 0, gp.tileSize, gp.tileSize); // when we instantiate this rectangle, we can
-																			// add 4
+		solidArea = new Rectangle(7, 0, 30, gp.tileSize); // when we instantiate this rectangle, we can
+																	// add 4
 		// parameters x, y, width, height
 
 		setDefaultValues();
@@ -64,14 +65,19 @@ public class Player extends Entity {
 	}
 
 	public void update() {
-
-		worldX += speed; // always moving forward 
-
-		// CHECK TILE COLLISION
+		
+		leftCollision = false;
 		collisionOn = false;
 		canJump = false;
 		
+		// CHECK FOR leftCollision, collisionOn, and canJump
 		gp.cCheckerPlayer.checkTile(this); // checks for collisionOn and canJump
+		
+		if (!leftCollision) {
+			worldX += speed; // always moving forward
+		}
+
+
 
 		if (isJumping == false && canJump) {
 			if (keyH.upPressed == true) {
@@ -150,7 +156,7 @@ public class Player extends Entity {
 		}
 
 		g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null); // this(null) is called an image
-																						// observer, we can
+																				// observer, we can
 		// just type null here
 		// drawing image, at x and y positions, of size gp.tileSize(width) and
 		// gp.tileSize(height)
