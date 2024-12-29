@@ -16,7 +16,7 @@ public class Player extends Entity {
 	KeyHandler keyH;
 
 	public BufferedImage run1, run2, jump1, jump2;
-	public int jumpSpeed = 7;
+	public int jumpSpeed = 6;
 	public boolean leftCollision;
 	private boolean isJumping = false;
 	public boolean canJump; // if this is true the player is touching the ground
@@ -30,11 +30,11 @@ public class Player extends Entity {
 
 		this.gp = gp;
 		this.keyH = keyH;
-
+		
 		screenX = gp.tileSize * 3;
-		screenY = (gp.tileSize * 5) + 15;
+		screenY = (gp.tileSize * 5);
 
-		solidArea = new Rectangle(7, 0, 34, gp.tileSize); // when we instantiate this rectangle, we can
+		solidArea = new Rectangle(7, 0, 34, 44); // when we instantiate this rectangle, we can
 															// add 4 parameters x, y, width, height
 
 		setDefaultValues();
@@ -45,7 +45,7 @@ public class Player extends Entity {
 	public void setDefaultValues() {
 		worldX = gp.tileSize * 3;
 		worldY = screenY;
-		speed = 4;
+		speed = 6;
 		type = "player";
 		direction = "down";
 	}

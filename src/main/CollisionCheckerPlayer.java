@@ -25,23 +25,32 @@ public class CollisionCheckerPlayer {
 
 		int tileNum1, tileNum2, tileNum3, tileNum4; // tileNum1 and tileNum2 are for up and down directions. tileNum3
 													// and tileNum4 are for right side tiles
-		playerRightCol = (playerRightWorldX + player.speed + 5) / gp.tileSize;
+		playerRightCol = (playerRightWorldX + player.speed) / gp.tileSize;
 		tileNum3 = gp.tileM.mapTileNum[playerRightCol][playerTopRow];
 		tileNum4 = gp.tileM.mapTileNum[playerRightCol][playerBottomRow];
 		if (gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
 			player.leftCollision = true; // if, when going down, the entity hits any one of the two tiles, collisionOn
 											// is true
 		}
+		
+		if (gp.tileM.tile[tileNum4].deadly) {
+			player.worldX = gp.tileSize * 3;
+			System.out.println("oops you died");
+		}
 
 		switch (player.direction) {
 		case "up":
 			playerRightCol = playerRightWorldX / gp.tileSize;
-			playerTopRow = (playerTopScreenY - player.jumpSpeed + 5) / gp.tileSize;
+			playerTopRow = (playerTopScreenY - player.jumpSpeed) / gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[playerLeftCol][playerTopRow];
 			tileNum2 = gp.tileM.mapTileNum[playerRightCol][playerTopRow];
 			if (gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
 				player.collisionOn = true; // if, when going up, the entity hits any one of the two tiles, collisionOn
 											// is true
+			}
+			if (gp.tileM.tile[tileNum2].deadly) {
+				player.worldX = gp.tileSize * 3;
+				System.out.println("oops you died");
 			}
 
 			break;
@@ -54,9 +63,13 @@ public class CollisionCheckerPlayer {
 				player.collisionOn = true; // if, when going down, the entity hits any one of the two tiles, collisionOn
 											// is true
 				player.canJump = true;
-				break;
-
 			}
+			if (gp.tileM.tile[tileNum2].deadly) {
+				player.worldX = gp.tileSize * 3;
+				System.out.println("oops you died");
+			}
+			break;
+			
 
 		}
 
