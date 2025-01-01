@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.JPanel;
@@ -13,6 +14,9 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 															// as a game screen
 	// our class has to implement runnable for us to be able to use a Thread. It has
 	// a single method, run(), where we write the code for the task.
+
+	
+	private static final long serialVersionUID = 1L; // to avoid a werid warning (static final serialVersionUID)
 	
 	// Screen settigns
 	final int originalTileSize = 16; // 16 x 16 tiles
@@ -46,9 +50,11 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	
 	public CollisionCheckerPlayer cCheckerPlayer = new CollisionCheckerPlayer(this);
 	
+	public AssetSetter aSetter = new AssetSetter(this);
 	
 	public Player player = new Player(this, keyH);
-
+	public SuperObject obj[] = new SuperObject[10]; // we can replace the content of each slot during the game. [10] means we can only have 10 objects at the same time.
+	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.BLACK);
@@ -56,7 +62,11 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		this.addKeyListener(keyH); // so that the game panel can recognise the key strokes
 		this.setFocusable(true);
 	}
-
+	
+	public void setupGame() {
+		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
+	}
+	
 	public void startGameThread() {
 
 		gameThread = new Thread(this); // we are passing this GamePanel class the thread's constructor. this is how we
@@ -121,9 +131,19 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		// layout
 
 		Graphics2D g2 = (Graphics2D) g; // so this means we changed the Graphics g to this Graphics2D class
-
+		// TILES
 		tileM.draw(g2);
+		
+		// OBJECT
+		for (int i = 0; i < obj.length; i++) {
+			if (obj[i] != null ) { // if we don't do this we might get a NullPointer error
+				obj[i].draw(g2, this);
+			}
+		}
+		
+		// PLAYER
 		player.draw(g2);
+		
 
 		g2.dispose(); // the program still works without this line but this is a good practice to save
 						// some memory

@@ -1,5 +1,6 @@
 package main;
 
+//import entity.Entity;
 import entity.Player;
 
 public class CollisionCheckerPlayer {
@@ -32,9 +33,9 @@ public class CollisionCheckerPlayer {
 			player.leftCollision = true; // if, when going down, the entity hits any one of the two tiles, collisionOn
 											// is true
 		}
-		
+
 		if (gp.tileM.tile[tileNum4].deadly) {
-			player.worldX = gp.tileSize * 3;
+//			player.worldX = gp.tileSize * 3;
 			System.out.println("oops you died");
 		}
 
@@ -49,7 +50,7 @@ public class CollisionCheckerPlayer {
 											// is true
 			}
 			if (gp.tileM.tile[tileNum2].deadly) {
-				player.worldX = gp.tileSize * 3;
+//				player.worldX = gp.tileSize * 3;
 				System.out.println("oops you died");
 			}
 
@@ -65,13 +66,77 @@ public class CollisionCheckerPlayer {
 				player.canJump = true;
 			}
 			if (gp.tileM.tile[tileNum2].deadly) {
-				player.worldX = gp.tileSize * 3;
+//				player.worldX = gp.tileSize * 3;
 				System.out.println("oops you died");
 			}
 			break;
-			
 
 		}
 
+	}
+
+	public int checkObject(Player player) {
+
+		int index = 999;
+		
+		for (int i = 0; i < gp.obj.length; i++) {
+			
+			if (gp.obj[i] != null) {
+				
+				// get entity's/player's solid area position
+				player.solidArea.x = player.worldX + player.solidArea.x;
+				player.solidArea.y = player.worldY + player.solidArea.y;
+				
+				// get the object solid area position
+				gp.obj[i].solidArea.x = gp.obj[i].worldX + gp.obj[i].solidArea.x;
+				gp.obj[i].solidArea.y = gp.obj[i].worldY + gp.obj[i].solidArea.y;
+				
+				// if it's going right (Which is always true)
+				player.solidArea.x += player.speed;
+				if (player.solidArea.intersects(gp.obj[i].solidArea)) {
+					if (gp.obj[i].collision) {
+						player.leftCollision = true;
+					}
+					
+					index = i;
+				}
+				
+				
+				switch (player.direction) {
+				// simulating players movement and checking where it will be after it moves
+				case "up":
+					player.solidArea.y -= player.jumpSpeed;
+					if (player.solidArea.intersects(gp.obj[i].solidArea)) {
+						if (gp.obj[i].collision) {
+							player.collisionOn = true;
+						}
+						
+						index = i;
+					}
+					break;
+				case "down":
+					player.solidArea.y += player.jumpSpeed;
+					if (player.solidArea.intersects(gp.obj[i].solidArea)) {
+						if (gp.obj[i].collision) {
+							player.collisionOn = true;
+						}
+						index = i;
+					}
+					
+					break;
+				}
+				
+				// resetting to default
+				
+				player.solidArea.x = player.solidAreaDefaultX;
+				player.solidArea.y = player.solidAreaDefaultY;
+				gp.obj[i].solidArea.x = gp.obj[i].solidAreaDefaultX;
+				gp.obj[i].solidArea.y = gp.obj[i].solidAreaDefaultY;
+				
+			}
+			
+		}
+		
+		return index;
 	}
 }

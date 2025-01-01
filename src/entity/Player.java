@@ -14,7 +14,16 @@ public class Player extends Entity {
 	// this player class will use GamePanel and KeyHandler classes
 	GamePanel gp;
 	KeyHandler keyH;
-
+	
+	public final int screenX;
+	public int screenY; // this is not final because we NEED to chaange this value to be able to
+						// JUMP!!!!
+	
+	public boolean bluePotion;
+	public int stars;
+	
+	
+	
 	public BufferedImage run1, run2, jump1, jump2;
 	public int jumpSpeed = 6;
 	public boolean leftCollision;
@@ -22,9 +31,7 @@ public class Player extends Entity {
 	public boolean canJump; // if this is true the player is touching the ground
 	private int jumpCounter = 0;
 
-	public final int screenX;
-	public int screenY; // this is not final because we NEED to chaange this value to be able to
-						// JUMP!!!!
+
 
 	public Player(GamePanel gp, KeyHandler keyH) {
 
@@ -36,7 +43,10 @@ public class Player extends Entity {
 
 		solidArea = new Rectangle(7, 0, 34, 44); // when we instantiate this rectangle, we can
 															// add 4 parameters x, y, width, height
-
+		
+		solidAreaDefaultX = solidArea.x;
+		solidAreaDefaultY = solidArea.y;
+		
 		setDefaultValues();
 		getPlayerImage();
 	}
@@ -45,7 +55,7 @@ public class Player extends Entity {
 	public void setDefaultValues() {
 		worldX = gp.tileSize * 3;
 		worldY = screenY;
-		speed = 6;
+		speed = 4;
 		type = "player";
 		direction = "down";
 	}
@@ -76,7 +86,10 @@ public class Player extends Entity {
 
 		// CHECK FOR leftCollision, collisionOn, and canJump
 		gp.cCheckerPlayer.checkTile(this); // checks for collisionOn and canJump
-
+		// CHECK OBJECTS COLLISION
+		int objIndex = gp.cCheckerPlayer.checkObject(this);
+		pickUpObject(objIndex);
+		
 		if (!leftCollision) {
 			worldX += speed; // always moving forward
 			if (worldX > 3750) { // this if statement is just for now because i dont want the game to just stop
@@ -129,7 +142,33 @@ public class Player extends Entity {
 			spriteCounter = 0;
 		}
 	}
-
+	
+	
+	public void pickUpObject(int i) {
+		
+		if (i != 999) {
+			
+			String objectName = gp.obj[i].name;
+			
+			switch (objectName) {
+			case "Blue_Potion":
+				bluePotion = true;
+				System.out.println("Blue potion touched");
+				gp.obj[i] = null;
+				break;
+				
+			case "Star":
+				stars ++;
+				gp.obj[i] = null;
+				System.out.println("Star touched");
+				
+				System.out.println("Stars: " + stars);
+				break;
+			}
+		}
+		
+	}
+	
 	public void draw(Graphics2D g2) {
 
 		BufferedImage image = null;
