@@ -53,7 +53,7 @@ public class Player extends Entity {
 
 	// fucntion to set default values
 	public void setDefaultValues() {
-		worldX = gp.tileSize * 3;
+		worldX = gp.tileSize * 4;
 		worldY = screenY;
 		speed = 4;
 		type = "player";
@@ -116,6 +116,7 @@ public class Player extends Entity {
 
 		if (!isJumping && canJump) {
 			if (keyH.upPressed == true) {
+				gp.playSoundEffect(1);
 				verticalDirection = "up";
 				isJumping = true;
 				canJump = false;
@@ -133,6 +134,7 @@ public class Player extends Entity {
 
 			if (jumpCounter >= 20) {
 				jumpCounter = 0;
+//				gp.playSoundEffect(2);
 				isJumping = false;
 				verticalDirection = "down";
 			}
@@ -142,6 +144,10 @@ public class Player extends Entity {
 			if (!upDownCollision) {
 				screenY += jumpSpeed;
 			}
+		}
+		
+		if (worldX >= 3600) {
+			worldX = gp.tileSize * 7;
 		}
 
 		// for the animation of the sprites
@@ -168,9 +174,13 @@ public class Player extends Entity {
 			
 			switch (objectName) {
 			case "Blue_Potion":
+				gp.playSoundEffect(3);
 				bluePotion = true;
 				System.out.println("Blue potion touched");
 				gp.obj[i] = null;
+				
+				speed += 1;
+				
 				break;
 				
 			case "Star":

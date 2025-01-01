@@ -15,9 +15,8 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	// our class has to implement runnable for us to be able to use a Thread. It has
 	// a single method, run(), where we write the code for the task.
 
-	
 	private static final long serialVersionUID = 1L; // to avoid a werid warning (static final serialVersionUID)
-	
+
 	// Screen settigns
 	final int originalTileSize = 16; // 16 x 16 tiles
 	final int scale = 3; // 3x zoom for the tiles
@@ -31,9 +30,12 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	// LEVEL MAP SETTINGS
 	public final int maxWorldCol = 80; // Please change this later as you make bigger maps pawan
 	public final int maxWorldRow = 12; // We wont have to change this ig because this will be fixed
-	public final int worldWidth = tileSize * maxWorldCol;
-	public final int worldHeight = tileSize * maxWorldRow; // self-explanatory because the total worldWidth is each
-															// tile's size * no. of cols in world
+
+	// dont think these two are necessary (until now at least)
+	// public final int worldWidth = tileSize * maxWorldCol;
+	// public final int worldHeight = tileSize * maxWorldRow; // self-explanatory
+	// because the total worldWidth is each
+	// // tile's size * no. of cols in world
 
 	// GAME FPS
 	int FPS = 60;
@@ -42,19 +44,23 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 	KeyHandler keyH = new KeyHandler();
 
+	public Sound sound = new Sound();
+
+	public CollisionCheckerPlayer cCheckerPlayer = new CollisionCheckerPlayer(this);
+
+	public AssetSetter aSetter = new AssetSetter(this);
+
 	// The most important thing in a 2D/3D game is the existence of time.
 	Thread gameThread; // thread is something you can start and stop. Once the thread starts, it keeps
-						// the game running(repeat a set a task) until we stop it.
+	// the game running(repeat a set a task) until we stop it.
 	// basically when we start this gameThread, it automatically calls the run()
 	// method (separately from the main program).
-	
-	public CollisionCheckerPlayer cCheckerPlayer = new CollisionCheckerPlayer(this);
-	
-	public AssetSetter aSetter = new AssetSetter(this);
-	
+
+	// PLAYER AND OBJECT
 	public Player player = new Player(this, keyH);
-	public SuperObject obj[] = new SuperObject[10]; // we can replace the content of each slot during the game. [10] means we can only have 10 objects at the same time.
-	
+	public SuperObject obj[] = new SuperObject[10]; // we can replace the content of each slot during the game. [10]
+													// means we can only have 10 objects at the same time.
+
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.BLACK);
@@ -62,11 +68,13 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		this.addKeyListener(keyH); // so that the game panel can recognise the key strokes
 		this.setFocusable(true);
 	}
-	
+
 	public void setupGame() {
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
+		
+		// playMusic(0);
 	}
-	
+
 	public void startGameThread() {
 
 		gameThread = new Thread(this); // we are passing this GamePanel class the thread's constructor. this is how we
@@ -88,7 +96,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 			// we check the current time in the beginning of the loop
 			currentTime = System.nanoTime();
-
+ 
 			// we subtract the lastTime from currentTime so that we can know how much time
 			// has passed and divide it by drawInterval
 			delta += (currentTime - lastTime) / drawInterval;
@@ -133,19 +141,39 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		Graphics2D g2 = (Graphics2D) g; // so this means we changed the Graphics g to this Graphics2D class
 		// TILES
 		tileM.draw(g2);
-		
+
 		// OBJECT
 		for (int i = 0; i < obj.length; i++) {
-			if (obj[i] != null ) { // if we don't do this we might get a NullPointer error
+			if (obj[i] != null) { // if we don't do this we might get a NullPointer error
 				obj[i].draw(g2, this);
 			}
 		}
-		
+
 		// PLAYER
 		player.draw(g2);
-		
 
 		g2.dispose(); // the program still works without this line but this is a good practice to save
 						// some memory
 	}
+
+	public void playMusic(int i) {
+
+		sound.setFile(i); // set
+		sound.play(); // play
+		sound.loop(); // loop
+
+	}
+
+	public void stopMusic() {
+
+		sound.stop();
+
+	}
+
+	public void playSoundEffect(int i) {
+
+		sound.setFile(i);
+		sound.play();
+	}
+
 }
