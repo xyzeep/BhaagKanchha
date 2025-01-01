@@ -24,9 +24,9 @@ public class Player extends Entity {
 	
 	
 	
-	public BufferedImage run1, run2, jump1, jump2;
+	public BufferedImage right1, right2, left1, left2;
 	public int jumpSpeed = 6;
-	public boolean leftCollision;
+	public boolean sideCollision;
 	private boolean isJumping = false;
 	public boolean canJump; // if this is true the player is touching the ground
 	private int jumpCounter = 0;
@@ -41,7 +41,7 @@ public class Player extends Entity {
 		screenX = gp.tileSize * 3;
 		screenY = (gp.tileSize * 5);
 
-		solidArea = new Rectangle(7, 0, 34, 44); // when we instantiate this rectangle, we can
+		solidArea = new Rectangle(2, 2, 46, 46); // when we instantiate this rectangle, we can
 															// add 4 parameters x, y, width, height
 		
 		solidAreaDefaultX = solidArea.x;
@@ -57,18 +57,17 @@ public class Player extends Entity {
 		worldY = screenY;
 		speed = 4;
 		type = "player";
-		direction = "down";
+		verticalDirection = "down";
+		horizontalDirection = "right";
 	}
 
 	// function to get the player images
 	public void getPlayerImage() {
 
 		try {
-			run1 = ImageIO.read(getClass().getResourceAsStream("/player/character.png"));
-			run2 = ImageIO.read(getClass().getResourceAsStream("/player/character.png"));
-			jump1 = ImageIO.read(getClass().getResourceAsStream("/player/character.png"));
-			jump2 = ImageIO.read(getClass().getResourceAsStream("/player/character.png"));
-			// jump3 = ImageIO.read(getClass().getResourceAsStream("/player/jump3.png"));
+			right1 = ImageIO.read(getClass().getResourceAsStream("/player/character_right.png"));
+			left1 = ImageIO.read(getClass().getResourceAsStream("/player/character_left.png"));
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -80,36 +79,53 @@ public class Player extends Entity {
 	// the update function that updates values like players position on the map,
 	// jump variables
 	public void update() {
-		leftCollision = false;
-		collisionOn = false;
+		sideCollision = false;
+		upDownCollision = false;
 		canJump = false;
 
-		// CHECK FOR leftCollision, collisionOn, and canJump
+		// CHECK FOR sideCollision, collisionOn, and canJump
 		gp.cCheckerPlayer.checkTile(this); // checks for collisionOn and canJump
 		// CHECK OBJECTS COLLISION
 		int objIndex = gp.cCheckerPlayer.checkObject(this);
 		pickUpObject(objIndex);
 		
-		if (!leftCollision) {
-			worldX += speed; // always moving forward
-			if (worldX > 3750) { // this if statement is just for now because i dont want the game to just stop
-									// when the map ends
-				worldX = gp.tileSize * 3;
+		if (keyH.leftPressed == true) {
+			if (horizontalDirection == "right" && sideCollision) {
+				sideCollision = false;
 			}
+			
+			if (!sideCollision) {
+				horizontalDirection = "left";
+				worldX -= speed;
+			}
+			
 		}
+		
+		else if (keyH.rightPressed == true) {
+			if (horizontalDirection == "left" && sideCollision) {
+				sideCollision = false;
+			}
+			
+			if (!sideCollision) {
+				horizontalDirection = "right";
+				worldX += speed;
+			}
+			
+		}
+		
 
-		if (isJumping == false && canJump) {
+		if (!isJumping && canJump) {
 			if (keyH.upPressed == true) {
-				System.out.println("JUMP PRESSED");
-				direction = "up";
+				verticalDirection = "up";
 				isJumping = true;
 				canJump = false;
 			}
 		}
-
+		
+	
 		if (isJumping) { // if the status is jumping then.... well do something
 			// if collsion is false, player can move
-			if (!collisionOn) {
+			if (!upDownCollision) {
 				screenY -= jumpSpeed;
 			}
 
@@ -118,12 +134,12 @@ public class Player extends Entity {
 			if (jumpCounter >= 20) {
 				jumpCounter = 0;
 				isJumping = false;
-				direction = "down";
+				verticalDirection = "down";
 			}
 		}
 
 		else { // if not do this(fall down)
-			if (!collisionOn) {
+			if (!upDownCollision) {
 				screenY += jumpSpeed;
 			}
 		}
@@ -172,25 +188,51 @@ public class Player extends Entity {
 	public void draw(Graphics2D g2) {
 
 		BufferedImage image = null;
-
-		switch (direction) {
+		
+		
+//		################## FIX THIS ANIMATION LATER
+//		switch (verticalDirection) {
+//		// depending on the direction(jumping or not) change the sprites + its animation
+//		case "up":
+//			if (spriteNum == 1) {
+//				image = jump1;
+//			} else if (spriteNum == 2) {
+//				image = jump2;
+//			}
+//
+//			break;
+//
+//		case "down":
+//			if (spriteNum == 1) {
+//				image = run1;
+//			}
+//
+//			else if (spriteNum == 2) {
+//				image = run2;
+//			}
+//			
+//			break;
+//		}
+		
+		switch (horizontalDirection) {
 		// depending on the direction(jumping or not) change the sprites + its animation
-		case "up":
+		case "left":
 			if (spriteNum == 1) {
-				image = jump1;
-			} else if (spriteNum == 2) {
-				image = jump2;
-			}
-
-			break;
-
-		case "down":
-			if (spriteNum == 1) {
-				image = run1;
+				image = left1;
 			}
 
 			else if (spriteNum == 2) {
-				image = run2;
+				image = left1;
+			}
+			break;
+
+		case "right":
+			if (spriteNum == 1) {
+				image = right1;
+			}
+
+			else if (spriteNum == 2) {
+				image = right1;
 			}
 			
 			break;

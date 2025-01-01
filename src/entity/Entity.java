@@ -10,11 +10,12 @@ public class Entity {
     public int speed;
     public String type;
     public BufferedImage img1, img2, img3, img4;
-    public String direction;
+    public String verticalDirection;
+    public String horizontalDirection;
     public int spriteCounter = 0;
     public int spriteNum = 1;
     public Rectangle solidArea; // the actual colliding part
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public boolean collisionOn = false;
+    public boolean upDownCollision = false;
     
 }

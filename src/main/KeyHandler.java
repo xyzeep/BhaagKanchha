@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener { // KeyListener is the interface for receiving keyboard
 													// events(keystrokes)
 
-	public boolean upPressed;
+	public boolean upPressed, leftPressed, rightPressed;
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -20,6 +20,14 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 		if (code == KeyEvent.VK_W) {
 			upPressed = true;
 		}
+		
+		if (code == KeyEvent.VK_A) {
+			leftPressed = true;
+		}
+		
+		if (code == KeyEvent.VK_D) {
+			rightPressed = true;
+		}
 
 	}
 
@@ -29,6 +37,14 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 
 		if (code == KeyEvent.VK_W) {
 			upPressed = false;
+		}
+		
+		if (code == KeyEvent.VK_A) {
+			leftPressed = false;
+		}
+		
+		if (code == KeyEvent.VK_D) {
+			rightPressed = false;
 		}
 	}
 
