@@ -30,7 +30,7 @@ public class UI {
 		// sec
 		Consolas_30 = new Font("Consolas", Font.PLAIN, 30); // this is how to setup a font using graphics2D
 		Consolas_80B = new Font("Consolas", Font.BOLD, 80);
-		OBJ_Star star = new OBJ_Star();
+		OBJ_Star star = new OBJ_Star(gp);
 		starImage = star.image;
 	}
 
@@ -51,18 +51,19 @@ public class UI {
 			int x, y;
 
 			text = "You completed this level!";
-			textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // looks weird but this returns																	// the length of the text
+			textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // looks weird but this returns
+																							// // the length of the text
 			x = gp.screenWidth / 2 - textLength / 2;
 			y = gp.screenHeight / 2 - (gp.tileSize * 3);
 			g2.drawString(text, x, y);
-			
+
 			text = "Your score is " + dFormat.format(1000 / playTime);
-			textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // looks weird but this returns																	// the length of the text
+			textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // looks weird but this returns
+																							// // the length of the text
 			x = gp.screenWidth / 2 - textLength / 2;
 			y = gp.screenHeight / 2 - (gp.tileSize * 2);
 			g2.drawString(text, x, y);
-			
-			
+
 			g2.setFont(Consolas_80B);
 			g2.setColor(Color.green);
 			text = "Congratulations!";
@@ -87,8 +88,8 @@ public class UI {
 
 			// play time
 			playTime += (double) 1 / 60;
-			
-			g2.drawString("Time: " + dFormat.format(playTime), gp.tileSize * 16, gp.tileSize + 24 );
+
+			g2.drawString("Time: " + dFormat.format(playTime), gp.tileSize * 16, gp.tileSize + 24);
 
 			// MESSAGE
 			if (messageOn) {

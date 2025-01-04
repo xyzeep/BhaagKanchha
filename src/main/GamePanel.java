@@ -43,20 +43,19 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	TileManager tileM = new TileManager(this);
 
 	KeyHandler keyH = new KeyHandler();
-	
-	
-	// the reason behind making different classes for music and sound effects is to avoid a weird bug that occurs when we do two things at the same time like playing SE and stopping music
+
+	// the reason behind making different classes for music and sound effects is to
+	// avoid a weird bug that occurs when we do two things at the same time like
+	// playing SE and stopping music
 	public Sound music = new Sound();
 	public Sound se = new Sound();
 
 	public CollisionCheckerPlayer cCheckerPlayer = new CollisionCheckerPlayer(this);
 
 	public AssetSetter aSetter = new AssetSetter(this);
-	
-	
+
 	public UI ui = new UI(this);
-	
-	
+
 	// The most important thing in a 2D/3D game is the existence of time.
 	Thread gameThread; // thread is something you can start and stop. Once the thread starts, it keeps
 	// the game running(repeat a set a task) until we stop it.
@@ -78,8 +77,8 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 	public void setupGame() {
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
-		
-		 playMusic(0);
+
+		playMusic(0);
 	}
 
 	public void startGameThread() {
@@ -103,7 +102,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 			// we check the current time in the beginning of the loop
 			currentTime = System.nanoTime();
- 
+
 			// we subtract the lastTime from currentTime so that we can know how much time
 			// has passed and divide it by drawInterval
 			delta += (currentTime - lastTime) / drawInterval;
@@ -147,21 +146,16 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		// layout
 
 		Graphics2D g2 = (Graphics2D) g; // so this means we changed the Graphics g to this Graphics2D class
-		
-		
+
 		// DEBUGG
-		long drawStart  = 0;
-		
-		if(keyH.toggleDebug) {
+		long drawStart = 0;
+
+		if (keyH.toggleDebug) {
 			drawStart = System.nanoTime();
 		}
 
 		// ##########################
-		
-		
-		
-		
-		
+
 		// TILES
 		tileM.draw(g2);
 
@@ -174,25 +168,22 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 		// PLAYER
 		player.draw(g2);
-		
-		
+
 		// UI
 		ui.draw(g2);
-		
-		
-		//debug
-		if(keyH.toggleDebug) {
+
+		// debug
+		if (keyH.toggleDebug) {
 			long drawEnd = System.nanoTime();
 			long passed = drawEnd - drawStart;
-			
+
 			g2.setColor(Color.red);
 			g2.drawString("Draw time: " + passed, 50, 200);
 			System.out.println("Total draw time :" + passed);
 		}
-		
+
 		// ##########################
-		
-		
+
 		g2.dispose(); // the program still works without this line but this is a good practice to save
 						// some memory
 	}
@@ -204,7 +195,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		music.loop(); // loop
 
 	}
-	
+
 	public void stopMusic() {
 
 		music.stop();

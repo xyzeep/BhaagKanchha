@@ -38,40 +38,38 @@ public class TileManager {
 	}
 
 	public void getTileImage() {
-		
-			// WE SCALED THE TILE IMAGES BEFOREHAND (and not during the game loop) to  improve perfomance 
-		
-			setup(0, "Empty", false, false);
-			
-			setup(1, "platformTop", true, false);
-			
-			setup(2, "spike1", true, true);
 
-			setup(3, "lava", true, true);
+		// WE SCALED THE TILE IMAGES BEFOREHAND (and not during the game loop) to
+		// improve perfomance
 
-			setup(4, "platformBlock", true, false);
+		setup(0, "Empty", false, false);
 
-			setup(5, "apple", true, false);
+		setup(1, "platformTop", true, false);
+
+		setup(2, "spike1", true, true);
+
+		setup(3, "lava", true, true);
+
+		setup(4, "platformBlock", true, false);
+
+		setup(5, "apple", false, false);
 
 	}
-	
-	
-	
+
 	public void setup(int index, String imageName, boolean collision, boolean deadly) {
 		UtilityTool uTool = new UtilityTool();
-		
+
 		try {
 			tile[index] = new Tile();
 			tile[index].image = ImageIO.read(getClass().getResourceAsStream("/tiles/" + imageName + ".png"));
 			tile[index].image = uTool.scaleImage(tile[index].image, gp.tileSize, gp.tileSize);
 			tile[index].collision = collision;
 			tile[index].deadly = deadly;
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-			
+
 		}
-	
+
 	}
 
 	// function to load the map data
@@ -139,7 +137,8 @@ public class TileManager {
 			// the problem in is the right side
 			if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX
 					&& worldX < gp.player.worldX + (gp.screenWidth - gp.player.screenX)) {
-				g2.drawImage(tile[tileNum].image, screenX, screenY, null); // no need to add width and height cause already scaled
+				g2.drawImage(tile[tileNum].image, screenX, screenY, null); // no need to add width and height cause
+																			// already scaled
 			}
 
 			worldCol++; // we increase this worldCol by 1 everytime after drawing a tile this is so easy
