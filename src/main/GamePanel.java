@@ -148,6 +148,20 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 		Graphics2D g2 = (Graphics2D) g; // so this means we changed the Graphics g to this Graphics2D class
 		
+		
+		// DEBUGG
+		long drawStart  = 0;
+		
+		if(keyH.toggleDebug) {
+			drawStart = System.nanoTime();
+		}
+
+		// ##########################
+		
+		
+		
+		
+		
 		// TILES
 		tileM.draw(g2);
 
@@ -165,6 +179,18 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		// UI
 		ui.draw(g2);
 		
+		
+		//debug
+		if(keyH.toggleDebug) {
+			long drawEnd = System.nanoTime();
+			long passed = drawEnd - drawStart;
+			
+			g2.setColor(Color.red);
+			g2.drawString("Draw time: " + passed, 50, 200);
+			System.out.println("Total draw time :" + passed);
+		}
+		
+		// ##########################
 		
 		
 		g2.dispose(); // the program still works without this line but this is a good practice to save
@@ -186,7 +212,6 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	}
 
 	public void playSoundEffect(int i) {
-
 		se.setFile(i);
 		se.play();
 	}

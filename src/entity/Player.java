@@ -41,7 +41,7 @@ public class Player extends Entity {
 		screenX = gp.tileSize * 3;
 		screenY = (gp.tileSize * 5);
 
-		solidArea = new Rectangle(2, 2, 46, 40); // when we instantiate this rectangle, we can
+		solidArea = new Rectangle(6, 2, 30, 42); // when we instantiate this rectangle, we can
 															// add 4 parameters x, y, width, height
 		
 		solidAreaDefaultX = solidArea.x;
@@ -55,7 +55,7 @@ public class Player extends Entity {
 	public void setDefaultValues() {
 		worldX = gp.tileSize * 4;
 		worldY = screenY;
-		speed = 4;
+		speed = 3;
 		type = "player";
 		verticalDirection = "down";
 		horizontalDirection = "right";
@@ -147,7 +147,10 @@ public class Player extends Entity {
 		}
 		
 		if (worldX >= 3600) {
-			worldX = gp.tileSize * 7;
+			gp.ui.gameFinished = true;
+			gp.stopMusic();
+			gp.playSoundEffect(4);
+//			worldX = gp.tileSize * 4;
 		}
 
 		// for the animation of the sprites
@@ -176,7 +179,7 @@ public class Player extends Entity {
 			case "Blue_Potion":
 				gp.playSoundEffect(3);
 				bluePotion = true;
-				System.out.println("Blue potion touched");
+				gp.ui.showMessage("Wow you got a potion");
 				gp.obj[i] = null;
 				
 				speed += 1;
@@ -186,9 +189,7 @@ public class Player extends Entity {
 			case "Star":
 				stars ++;
 				gp.obj[i] = null;
-				System.out.println("Star touched");
-				
-				System.out.println("Stars: " + stars);
+				gp.ui.showMessage("star +1");
 				break;
 			}
 		}
@@ -253,6 +254,9 @@ public class Player extends Entity {
 		// just type null here
 		// drawing image, at x and y positions, of size gp.tileSize(width) and
 		// gp.tileSize(height)
-
+		
+	
+		g2.drawRect(screenX +  solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+		g2.drawRect(screenX + gp.tileSize, screenY + solidArea.y, gp.tileSize, gp.tileSize);
 	}
 }

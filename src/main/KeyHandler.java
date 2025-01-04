@@ -8,7 +8,11 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 													// events(keystrokes)
 
 	public boolean upPressed, leftPressed, rightPressed;
-
+	
+	//debug
+	boolean toggleDebug = false;
+	// ##########################
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
@@ -28,6 +32,18 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 		if (code == KeyEvent.VK_D) {
 			rightPressed = true;
 		}
+		
+		// DEBUG
+		if (code == KeyEvent.VK_T) {
+			if (!toggleDebug) {
+				toggleDebug = true;
+			}
+			
+			else {
+				toggleDebug = false;
+			}
+		}
+		// ##########################
 
 	}
 
