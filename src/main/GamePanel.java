@@ -42,7 +42,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 	TileManager tileM = new TileManager(this);
 
-	KeyHandler keyH = new KeyHandler();
+	KeyHandler keyH = new KeyHandler(this);
 
 	// the reason behind making different classes for music and sound effects is to
 	// avoid a weird bug that occurs when we do two things at the same time like
@@ -57,7 +57,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public UI ui = new UI(this);
 
 	// The most important thing in a 2D/3D game is the existence of time.
-	Thread gameThread; // thread is something you can start and stop. Once the thread starts, it keeps
+	public Thread gameThread; // thread is something you can start and stop. Once the thread starts, it keeps
 	// the game running(repeat a set a task) until we stop it.
 	// basically when we start this gameThread, it automatically calls the run()
 	// method (separately from the main program).
@@ -66,6 +66,11 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public Player player = new Player(this, keyH);
 	public SuperObject obj[] = new SuperObject[10]; // we can replace the content of each slot during the game. [10]
 													// means we can only have 10 objects at the same time.
+
+	// GAME STATE
+	public int gameState;
+	public final int playState = 1;
+	public final int pauseState = 2;
 
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -77,8 +82,10 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 	public void setupGame() {
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
-
 		playMusic(0);
+
+		gameState = playState;
+
 	}
 
 	public void startGameThread() {
@@ -132,7 +139,13 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	}
 
 	public void update() {
-		player.update();
+
+		if (gameState == playState) {
+			player.update();
+			
+		} else if (gameState == pauseState) {
+			// nothing
+		}
 	}
 
 	public void paintComponent(Graphics g) {
@@ -193,6 +206,10 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		music.setFile(i); // set
 		music.play(); // play
 		music.loop(); // loop
+
+	}
+	
+	public void pauseMusic() {
 
 	}
 

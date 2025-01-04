@@ -168,7 +168,8 @@ public class Player extends Entity {
 		if (worldX >= 3600) {
 			gp.ui.gameFinished = true;
 			gp.stopMusic();
-			gp.playSoundEffect(4);
+			gp.gameThread = null;
+			
 		}
 
 	}
