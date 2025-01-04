@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	// a single method, run(), where we write the code for the task.
 
 	private static final long serialVersionUID = 1L; // to avoid a werid warning (static final serialVersionUID)
-
+	public int currentFPS;
 	// Screen settigns
 	final int originalTileSize = 16; // 16 x 16 tiles
 	final int scale = 3; // 3x zoom for the tiles
@@ -43,13 +43,20 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	TileManager tileM = new TileManager(this);
 
 	KeyHandler keyH = new KeyHandler();
-
-	public Sound sound = new Sound();
+	
+	
+	// the reason behind making different classes for music and sound effects is to avoid a weird bug that occurs when we do two things at the same time like playing SE and stopping music
+	public Sound music = new Sound();
+	public Sound se = new Sound();
 
 	public CollisionCheckerPlayer cCheckerPlayer = new CollisionCheckerPlayer(this);
 
 	public AssetSetter aSetter = new AssetSetter(this);
-
+	
+	
+	public UI ui = new UI(this);
+	
+	
 	// The most important thing in a 2D/3D game is the existence of time.
 	Thread gameThread; // thread is something you can start and stop. Once the thread starts, it keeps
 	// the game running(repeat a set a task) until we stop it.
@@ -72,7 +79,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public void setupGame() {
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
 		
-		// playMusic(0);
+		 playMusic(0);
 	}
 
 	public void startGameThread() {
@@ -118,6 +125,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 			if (timer >= 1000000000) {
 				System.out.println("FPS: " + drawCount); // to check id the function is working properly(i.e. if the
 															// game is running in 60 FPS)
+				currentFPS = drawCount;
 				drawCount = 0;
 				timer = 0;
 			}
@@ -139,6 +147,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		// layout
 
 		Graphics2D g2 = (Graphics2D) g; // so this means we changed the Graphics g to this Graphics2D class
+		
 		// TILES
 		tileM.draw(g2);
 
@@ -151,29 +160,35 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 		// PLAYER
 		player.draw(g2);
-
+		
+		
+		// UI
+		ui.draw(g2);
+		
+		
+		
 		g2.dispose(); // the program still works without this line but this is a good practice to save
 						// some memory
 	}
 
 	public void playMusic(int i) {
 
-		sound.setFile(i); // set
-		sound.play(); // play
-		sound.loop(); // loop
+		music.setFile(i); // set
+		music.play(); // play
+		music.loop(); // loop
 
 	}
-
+	
 	public void stopMusic() {
 
-		sound.stop();
+		music.stop();
 
 	}
 
 	public void playSoundEffect(int i) {
 
-		sound.setFile(i);
-		sound.play();
+		se.setFile(i);
+		se.play();
 	}
 
 }

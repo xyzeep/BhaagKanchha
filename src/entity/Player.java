@@ -41,7 +41,7 @@ public class Player extends Entity {
 		screenX = gp.tileSize * 3;
 		screenY = (gp.tileSize * 5);
 
-		solidArea = new Rectangle(2, 2, 46, 46); // when we instantiate this rectangle, we can
+		solidArea = new Rectangle(2, 2, 46, 40); // when we instantiate this rectangle, we can
 															// add 4 parameters x, y, width, height
 		
 		solidAreaDefaultX = solidArea.x;

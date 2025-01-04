@@ -1,6 +1,7 @@
 package tile;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,13 +16,22 @@ public class TileManager {
 	GamePanel gp;
 	public Tile[] tile;
 	public int mapTileNum[][];
-
+	BufferedImage bgImage;
+	
+	
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 
 		tile = new Tile[10];
 		mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
-
+		
+		//get level bg image
+		try {
+		bgImage = ImageIO.read(getClass().getResourceAsStream("/maps/level1_bg.jpg"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		getTileImage();
 		loadMap("/maps/level1.txt");
 
@@ -31,7 +41,7 @@ public class TileManager {
 		try {
 
 			tile[0] = new Tile();
-			tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/background.png"));
+			tile[0].image = ImageIO.read(getClass().getResourceAsStream("/maps/Empty.png"));
 			
 			tile[1] = new Tile();
 			tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/platformTop.png"));
@@ -51,7 +61,8 @@ public class TileManager {
 			tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/platformBlock.png"));
 			tile[4].collision = true;
 			
-
+			tile[5] = new Tile();
+			tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/apple.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -97,7 +108,10 @@ public class TileManager {
 	}
 
 	public void draw(Graphics2D g2) {
-
+		
+		// draw the bg first
+		g2.drawImage(bgImage, 0, 0, gp.screenWidth, gp.screenHeight, null);
+		
 		int worldCol = 0;
 		int worldRow = 0;
 
@@ -131,7 +145,7 @@ public class TileManager {
 				worldRow++;
 			}
 		}
-
+		
 	}
 
 }
