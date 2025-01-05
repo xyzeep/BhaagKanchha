@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
+
+import entity.Entity;
 import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
@@ -51,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public Sound se = new Sound();
 
 	public CollisionCheckerPlayer cCheckerPlayer = new CollisionCheckerPlayer(this);
+//	public CollisionChecker cChecker = new CollisionChecker(this);
 
 	public AssetSetter aSetter = new AssetSetter(this);
 
@@ -66,11 +69,14 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public Player player = new Player(this, keyH);
 	public SuperObject obj[] = new SuperObject[10]; // we can replace the content of each slot during the game. [10]
 													// means we can only have 10 objects at the same time.
-
+	
+	
+	public Entity npc[] = new Entity[5];	
 	// GAME STATE
 	public int gameState;
 	public final int playState = 1;
 	public final int pauseState = 2;
+
 
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -82,6 +88,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 	public void setupGame() {
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
+		aSetter.setNPC();
 		playMusic(0);
 
 		gameState = playState;
@@ -141,7 +148,14 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public void update() {
 
 		if (gameState == playState) {
+			//PLAYER
 			player.update();
+			// NPC
+			for(int i = 0; i < npc.length; i++) {
+				if(npc[i] != null) {
+					npc[i].update();		
+				}
+	}
 			
 		} else if (gameState == pauseState) {
 			// nothing
@@ -178,7 +192,15 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 				obj[i].draw(g2, this);
 			}
 		}
-
+		// NPC
+		for (int i = 0; i < npc.length; i++) {
+			if (npc[i] != null) { // if we don't do this we might get a NullPointer error
+				npc[i].draw(g2);
+				System.out.println("Drew it");
+			}
+		}
+		
+		
 		// PLAYER
 		player.draw(g2);
 
