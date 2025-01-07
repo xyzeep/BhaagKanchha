@@ -1,5 +1,7 @@
 package entity;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -15,21 +17,23 @@ public class Entity {
 	GamePanel gp;
 
 	public int worldX, worldY; // players/entity's postition in the world map
-	public int screenX, screenY; // only applicable for player (until now)
+	public int screenX;
+	public int screenY; // only applicable for player (until now)
 	public int speed;
-	public boolean collisionOn;
+	public int jumpSpeed = 6;
+	public boolean canJump; // if this is true the player is touching the ground
 	public boolean move = true;
 	public String type;
 	public int moveCounter = 0;
-	public String direction = "right";
 	public BufferedImage right1, right2, left1, left2;
-	public String verticalDirection;
-	public String horizontalDirection;
+	public String verticalDirection = "down";
+	public String horizontalDirection = "right";
 	public int spriteCounter = 0;
 	public int spriteNum = 1;
-	public Rectangle solidArea = new Rectangle(0, 0, 48, 48);; // the actual colliding part
+	public Rectangle solidArea = new Rectangle(0, 0, 48, 48); // the actual colliding part
 	public int solidAreaDefaultX, solidAreaDefaultY;
 	public boolean upDownCollision = false;
+	public boolean sideCollision = false;
 
 	public int actionLockCounter = 0;
 
@@ -45,25 +49,29 @@ public class Entity {
 	public void update() {
 		setAction(); // in NPC_Bob.java
 
-//		collisionOn = false;
-////		gp.cChecker.checkTile(this);
+		sideCollision = false;
+		gp.cChecker.checkTile(this);
 
-		
-		
-	
-
-			if (collisionOn == false) {
-				switch (direction) {
-				case "left":
-					worldX -= speed;
-					break;
-				case "right":
-					worldX += speed;
-					break;
-				}
-				
+		if (!sideCollision) {
+			switch (horizontalDirection) {
+			case "left":
+				worldX -= speed;
+				break;
+			case "right":
+				worldX += speed;
+				break;
+			}
 
 		}
+		
+		if (upDownCollision == false) {
+
+			screenY += speed;
+			}
+
+		
+		
+		
 		spriteCounter++;
 
 		if (spriteCounter > 12) // adjust this value if you want to customize animation speed okay?
@@ -87,7 +95,7 @@ public class Entity {
 		if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX
 				&& worldX < gp.player.worldX + (gp.screenWidth - gp.player.screenX)) {
 
-			switch (direction) {
+			switch (horizontalDirection) {
 			// depending on the direction(jumping or not) change the sprites + its animation
 			case "left":
 				if (spriteNum == 1) {
@@ -113,7 +121,10 @@ public class Entity {
 
 				break;
 			}
+			g2.setStroke(new BasicStroke(3));
+			g2.setColor(Color.YELLOW);
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.width);
 		}
 	}
 

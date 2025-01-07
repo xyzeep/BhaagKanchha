@@ -1,42 +1,38 @@
 package entity;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-
 import main.GamePanel;
 import main.KeyHandler;
-
 
 public class Player extends Entity {
 
 	// this player class will use GamePanel and KeyHandler classes
 	KeyHandler keyH;
 
-	public final int screenX;
-	public int screenY; // this is not final because we NEED to chaange this value to be able to
-						// JUMP!!!!
-
-
-	
-	public int jumpSpeed = 6;
-	public boolean sideCollision;
 	private boolean isJumping = false;
-	public boolean canJump; // if this is true the player is touching the ground
+
 	private int jumpCounter = 0;
 
 	public Player(GamePanel gp, KeyHandler keyH) {
-		
+
 		super(gp);
-		
+
 		this.keyH = keyH;
 
 		screenX = gp.tileSize * 3;
 		screenY = (gp.tileSize * 5);
 
-		solidArea = new Rectangle(6, 2, 30, 42); // when we instantiate this rectangle, we can
-													// add 4 parameters x, y, width, height
+//		solidArea = new Rectangle(6, 2, 30, 42);
+		solidArea.x = 6;
+		solidArea.y = 2;
+		solidArea.width = 30;
+		solidArea.height = 42; // when we instantiate this rectangle, we can
+								// add 4 parameters x, y, width, height
 
 		solidAreaDefaultX = solidArea.x;
 		solidAreaDefaultY = solidArea.y;
@@ -45,14 +41,13 @@ public class Player extends Entity {
 		getPlayerImage();
 	}
 
-	// fucntion to set default values
+	// fucntion to set default valuesd
 	public void setDefaultValues() {
 		worldX = gp.tileSize * 4;
 		worldY = screenY;
 		speed = 5;
+		jumpSpeed = 6;
 		type = "player";
-		verticalDirection = "down";
-		horizontalDirection = "right";
 	}
 
 	// function to get the player images
@@ -64,7 +59,6 @@ public class Player extends Entity {
 		left2 = setup("/player/boy_left_2");
 	}
 
-
 	// the update function that updates values like players position on the map,
 	// jump variables
 	public void update() {
@@ -73,9 +67,10 @@ public class Player extends Entity {
 		canJump = false;
 
 		// CHECK FOR sideCollision, collisionOn, and canJump
-		gp.cCheckerPlayer.checkTile(this); // checks for collisionOn and canJump
+		gp.cChecker.checkTile(this); // checks for collisionOn and canJump
 		// CHECK OBJECTS COLLISION
-		int objIndex = gp.cCheckerPlayer.checkObject(this);
+
+		int objIndex = gp.cChecker.checkObject(this);
 		pickUpObject(objIndex);
 
 		if (keyH.upPressed || keyH.rightPressed || keyH.leftPressed) {
@@ -129,7 +124,7 @@ public class Player extends Entity {
 
 		if (isJumping) { // if the status is jumping then.... well do something
 			// if collsion is false, player can move
-			if (!upDownCollision) {
+			if (!upDownCollision && screenY >= 2) {
 				screenY -= jumpSpeed;
 			}
 
@@ -147,12 +142,11 @@ public class Player extends Entity {
 				screenY += jumpSpeed;
 			}
 		}
-
-		if (worldX >= 3600) {
+		
+		if (worldX >= 7580) {
 			gp.stopMusic();
 			gp.ui.gameFinished = true;
 
-			
 		}
 
 	}
@@ -170,7 +164,7 @@ public class Player extends Entity {
 				gp.ui.showMessage("Speed++");
 				gp.obj[i] = null;
 
-				speed ++;
+				speed += 4;
 
 				break;
 
@@ -187,7 +181,6 @@ public class Player extends Entity {
 	public void draw(Graphics2D g2) {
 
 		BufferedImage image = null;
-
 
 		switch (horizontalDirection) {
 		// depending on the direction(jumping or not) change the sprites + its animation
@@ -218,7 +211,9 @@ public class Player extends Entity {
 		// just type null here
 		// drawing image, at x and y positions, of size gp.tileSize(width) and
 		// gp.tileSize(height)
-
+		// ########################
+		g2.setStroke(new BasicStroke(3));
+		g2.setColor(Color.GREEN);
 		g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
 		g2.drawRect(screenX + gp.tileSize, screenY + solidArea.y, gp.tileSize, gp.tileSize);
 	}

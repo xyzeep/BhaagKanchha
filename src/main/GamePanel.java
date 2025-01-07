@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public final int screenHeight = tileSize * maxScreenRow; // 576 px
 
 	// LEVEL MAP SETTINGS
-	public final int maxWorldCol = 80; // Please change this later as you make bigger maps pawan
+	public final int maxWorldCol = 164; // Please change this later as you make bigger maps pawan
 	public final int maxWorldRow = 12; // We wont have to change this ig because this will be fixed
 
 	// dont think these two are necessary (until now at least)
@@ -52,8 +52,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public Sound music = new Sound();
 	public Sound se = new Sound();
 
-	public CollisionCheckerPlayer cCheckerPlayer = new CollisionCheckerPlayer(this);
-//	public CollisionChecker cChecker = new CollisionChecker(this);
+	public CollisionChecker cChecker = new CollisionChecker(this);
 
 	public AssetSetter aSetter = new AssetSetter(this);
 
@@ -69,14 +68,13 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public Player player = new Player(this, keyH);
 	public SuperObject obj[] = new SuperObject[10]; // we can replace the content of each slot during the game. [10]
 													// means we can only have 10 objects at the same time.
-	
-	
-	public Entity npc[] = new Entity[5];	
+
+	public Entity npc[] = new Entity[5];
 	// GAME STATE
 	public int gameState;
+	public final int titleState = 0;
 	public final int playState = 1;
 	public final int pauseState = 2;
-
 
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -89,9 +87,8 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public void setupGame() {
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
 		aSetter.setNPC();
-		playMusic(0);
-
-		gameState = playState;
+//		playMusic(0); // don't want music in titleScreen
+		gameState = titleState;
 
 	}
 
@@ -137,7 +134,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 			if (timer >= 1000000000) {
 				System.out.println("FPS: " + drawCount); // to check id the function is working properly(i.e. if the
-															// game is running in 60 FPS)
+				// game is running in 60 FPS)
 				currentFPS = drawCount;
 				drawCount = 0;
 				timer = 0;
@@ -148,18 +145,19 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public void update() {
 
 		if (gameState == playState) {
-			//PLAYER
+			// PLAYER
 			player.update();
 			// NPC
-			for(int i = 0; i < npc.length; i++) {
-				if(npc[i] != null) {
-					npc[i].update();		
+			for (int i = 0; i < npc.length; i++) {
+				if (npc[i] != null) {
+					npc[i].update();
 				}
-	}
-			
+			}
+
 		} else if (gameState == pauseState) {
 			// nothing
 		}
+
 	}
 
 	public void paintComponent(Graphics g) {
@@ -181,40 +179,44 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 			drawStart = System.nanoTime();
 		}
 
-		// ##########################
-
-		// TILES
-		tileM.draw(g2);
-
-		// OBJECT
-		for (int i = 0; i < obj.length; i++) {
-			if (obj[i] != null) { // if we don't do this we might get a NullPointer error
-				obj[i].draw(g2, this);
-			}
+		// TITLE SCREEN
+		if (gameState == titleState) {
+			ui.draw(g2);
 		}
-		// NPC
-		for (int i = 0; i < npc.length; i++) {
-			if (npc[i] != null) { // if we don't do this we might get a NullPointer error
-				npc[i].draw(g2);
-				System.out.println("Drew it");
+
+		// others
+		else{
+			// TILES
+			tileM.draw(g2);
+
+			// OBJECT
+			for (int i = 0; i < obj.length; i++) {
+				if (obj[i] != null) { // if we don't do this we might get a NullPointer error
+					obj[i].draw(g2, this);
+				}
 			}
+			// NPC
+			for (int i = 0; i < npc.length; i++) {
+				if (npc[i] != null) { // if we don't do this we might get a NullPointer error
+					npc[i].draw(g2);
+				}
+			}
+
+			// PLAYER
+			player.draw(g2);
+
+			// UI
+			ui.draw(g2);
 		}
 		
-		
-		// PLAYER
-		player.draw(g2);
-
-		// UI
-		ui.draw(g2);
-
 		// debug
 		if (keyH.toggleDebug) {
 			long drawEnd = System.nanoTime();
 			long passed = drawEnd - drawStart;
 
-			g2.setColor(Color.red);
+			g2.setColor(Color.WHITE);
 			g2.drawString("Draw time: " + passed, 50, 200);
-			System.out.println("Total draw time :" + passed);
+
 		}
 
 		// ##########################
@@ -230,7 +232,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		music.loop(); // loop
 
 	}
-	
+
 	public void pauseMusic() {
 
 	}
