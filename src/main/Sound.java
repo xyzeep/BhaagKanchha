@@ -18,6 +18,8 @@ public class Sound {
 		soundURL[2] = getClass().getResource("/sound/land.wav");
 		soundURL[3] = getClass().getResource("/sound/potion.wav");
 		soundURL[4] = getClass().getResource("/sound/levelFinish.wav");
+		soundURL[5] = getClass().getResource("/sound/cursor.wav");
+		soundURL[6] = getClass().getResource("/sound/hurt.wav");
 
 	}
 

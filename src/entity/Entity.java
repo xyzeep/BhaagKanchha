@@ -36,7 +36,12 @@ public class Entity {
 	public boolean sideCollision = false;
 
 	public int actionLockCounter = 0;
-
+	
+	// ENtity STATUS
+	public int maxLife;
+	public int life;
+	
+	
 	public Entity(GamePanel gp) {
 		this.gp = gp;
 
@@ -65,7 +70,6 @@ public class Entity {
 		}
 		
 		if (upDownCollision == false) {
-
 			screenY += speed;
 			}
 

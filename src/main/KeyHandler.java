@@ -40,11 +40,6 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 				rightPressed = true;
 			}
 
-//			if (code == KeyEvent.VK_ESCAPE) {
-//				gp.gameState = gp.pauseState;
-////				System.out.println("chiryo ra gameState is now" + ha);
-//			}
-
 			// ##################### DEBUG
 			if (code == KeyEvent.VK_T) {
 				if (!toggleDebug) {
@@ -63,47 +58,51 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 		if (code == KeyEvent.VK_ESCAPE) {
 			if (gp.gameState == gp.playState) {
 				gp.gameState = gp.pauseState;
-			}
-			else if (gp.gameState == gp.pauseState) {
+			} else if (gp.gameState == gp.pauseState) {
 				gp.gameState = gp.playState;
 			}
 		}
 
 		// TITLE STATE
 		if (gp.gameState == gp.titleState) {
+			
 			if (code == KeyEvent.VK_W) {
+				gp.playSoundEffect(5);
 				gp.ui.commandNum--;
 				if (gp.ui.commandNum < 0) {
 					gp.ui.commandNum = 3;
 				}
-
 			} else if (code == KeyEvent.VK_S) {
+				gp.playSoundEffect(5);
 				gp.ui.commandNum++;
 				if (gp.ui.commandNum > 3) {
 					gp.ui.commandNum = 0;
 				}
 			}
-			
-			if(code == KeyEvent.VK_ENTER) {
+
+			gp.ui.cursorZoom = gp.ui.commandNum; // for the zoom effect
+
+			// HANDELING MENUS
+			if (code == KeyEvent.VK_ENTER) {
 				switch (gp.ui.commandNum) {
-				case 0: //play
+				case 0: // play
 					gp.gameState = gp.playState;
 					gp.playMusic(0);
 					break;
-					
-				case 1: //options
+
+				case 1: // options
 					// do later
 					break;
-					
+
 				case 2: // quit
 					System.exit(0); // exit with 0(successfully)
 					break;
-					
+
 				case 3: // logout
 					// do later
-					
+
 				}
-				
+
 			}
 		}
 

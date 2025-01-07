@@ -47,7 +47,11 @@ public class Player extends Entity {
 		worldY = screenY;
 		speed = 5;
 		jumpSpeed = 6;
-		type = "player";
+		
+		// PLAYER STATUS
+		maxLife = 6; // one life means half-heart 2 lives means one heart
+		life = maxLife;
+
 	}
 
 	// function to get the player images
@@ -68,10 +72,13 @@ public class Player extends Entity {
 
 		// CHECK FOR sideCollision, collisionOn, and canJump
 		gp.cChecker.checkTile(this); // checks for collisionOn and canJump
+		
 		// CHECK OBJECTS COLLISION
-
 		int objIndex = gp.cChecker.checkObject(this);
 		pickUpObject(objIndex);
+		
+		// CHECK EVENT
+		gp.eHandler.checkEvent();
 
 		if (keyH.upPressed || keyH.rightPressed || keyH.leftPressed) {
 			// for the animation of the sprites

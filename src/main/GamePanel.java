@@ -57,7 +57,11 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public AssetSetter aSetter = new AssetSetter(this);
 
 	public UI ui = new UI(this);
-
+	
+	public EventHandler eHandler = new EventHandler(this);
+	
+	
+	
 	// The most important thing in a 2D/3D game is the existence of time.
 	public Thread gameThread; // thread is something you can start and stop. Once the thread starts, it keeps
 	// the game running(repeat a set a task) until we stop it.
@@ -182,12 +186,17 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		// TITLE SCREEN
 		if (gameState == titleState) {
 			ui.draw(g2);
+			
+		
 		}
 
 		// others
 		else{
 			// TILES
 			tileM.draw(g2);
+			
+			
+
 
 			// OBJECT
 			for (int i = 0; i < obj.length; i++) {
@@ -204,9 +213,12 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 			// PLAYER
 			player.draw(g2);
-
+			
+			
 			// UI
 			ui.draw(g2);
+			
+			
 		}
 		
 		// debug

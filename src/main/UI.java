@@ -11,7 +11,8 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 
 import entity.Player;
-import object.OBJ_Star;
+import object.SuperObject;
+import object.OBJ_Heart;
 
 public class UI {
 
@@ -22,7 +23,7 @@ public class UI {
 
 	Font maruMonica, retro8Bit, qaaxee;
 
-	BufferedImage starImage;
+	BufferedImage fullHeart, halfHeart, emptyHeart;
 	public boolean messageOn = false;
 	public String message = "";
 	int messageCounter = 0;
@@ -31,6 +32,8 @@ public class UI {
 	public int commandNum = 0;
 	double playTime;
 	DecimalFormat dFormat = new DecimalFormat("#0.00");
+
+	public int cursorZoom = 0;
 
 	public UI(GamePanel gp) {
 		this.gp = gp;
@@ -48,8 +51,13 @@ public class UI {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		OBJ_Star star = new OBJ_Star(gp);
-		starImage = star.image;
+
+		// Get HUD images
+
+		SuperObject heart = new OBJ_Heart(gp);
+		fullHeart = heart.image;
+		halfHeart = heart.image2;
+		emptyHeart = heart.image3;
 	}
 
 	public void draw(Graphics2D g2) {
@@ -70,36 +78,56 @@ public class UI {
 
 		// PLAY STATE
 		if (gp.gameState == gp.playState) {
-			// DO PLAY STATE THINGS LATER
+			drawPlayerLife();
 		}
 
 		// PAUSE STATE
 		if (gp.gameState == gp.pauseState) {
+			drawPlayerLife();
 			drawPauseScreen();
 		}
 
 		// WHEN THE GAME IS FINISHED
 		if (gameFinished == true) {
-
-			g2.setFont(maruMonica); // and the just set it like this here
-			g2.setColor(Color.black);
-
-			String text;
-			int textLength;
-			int x, y;
-
-			text = "You completed this level!";
-			textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // looks weird but this returns
-																							// // the length of the text
-			textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // looks weird but this returns
-																							// // the length of the text
-			x = gp.screenWidth / 2 - textLength / 2;
-			y = gp.screenHeight / 2 - (gp.tileSize * 3);
-			g2.drawString(text, x, y);
-
+			// show game finished message
 			gp.gameThread = null;
 		}
 
+	}
+
+	public void drawPlayerLife() {
+		
+		int x = gp.tileSize / 2;
+		int y = gp.tileSize / 4;
+
+		int i = 0;
+//		// Draw Blank hearts first(MAX LIFE)
+//		while (i < gp.player.maxLife / 2) {
+//			g2.drawImage(emptyHeart, x, y, null);
+//			i++;
+//			x += gp.tileSize;
+//		}
+
+		// reset the values
+		x = gp.tileSize / 2;
+		y = gp.tileSize / 4;
+		i = 0;
+
+		// DRAW CURRENT LIFE
+		while (i < gp.player.life) {
+
+			g2.drawImage(halfHeart, x, y, null);
+			i++;
+
+			if (i < gp.player.life) {
+				g2.drawImage(fullHeart, x, y, null);
+			}
+			i++;
+			x += gp.tileSize;
+			if (i < gp.player.life) {
+				g2.drawImage(fullHeart, x, y, null);
+			}
+		}
 	}
 
 	public void showMessage(String text) {
@@ -110,7 +138,7 @@ public class UI {
 	public void drawTitleScreen() {
 
 		// GAME NAME
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+		g2.setFont(qaaxee.deriveFont(Font.BOLD, 96F));
 		String text = "Bhaag Kanchha";
 		int x = getXforCenteredText(text);
 		int y = gp.screenHeight / 5;
@@ -125,19 +153,29 @@ public class UI {
 
 		// MENU
 		g2.setFont(maruMonica);
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+
+//		x = 415;
+		x = 100;
 
 		// play
 		text = "PLAY";
-		x = getXforCenteredText(text) - (gp.tileSize / 2);
-		y += gp.tileSize * 5;
+		if (cursorZoom == 0) {
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 52F));
+		}
+
+		y += gp.tileSize * 3;
 		g2.drawString(text, x, y);
 		if (commandNum == 0) {
 			g2.drawString(">", x - gp.tileSize / 2, y);
 		}
 
 		// Options
-		text = "Options";
+		text = "OPTIONS";
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+		if (cursorZoom == 1) {
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 52F));
+		}
 		y += gp.tileSize * 1.1;
 		g2.drawString(text, x, y);
 		if (commandNum == 1) {
@@ -145,7 +183,11 @@ public class UI {
 		}
 
 		// Quit
-		text = "Quit";
+		text = "QUIT";
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+		if (cursorZoom == 2) {
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 52F));
+		}
 		y += gp.tileSize * 1.1;
 		g2.drawString(text, x, y);
 		if (commandNum == 2) {
@@ -153,7 +195,11 @@ public class UI {
 		}
 
 		// Logout
-		text = "Log out";
+		text = "LOG OUT";
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+		if (cursorZoom == 3) {
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 52F));
+		}
 		y += gp.tileSize * 1.1;
 		g2.drawString(text, x, y);
 		if (commandNum == 3) {
@@ -169,13 +215,17 @@ public class UI {
 	}
 
 	public void drawPauseScreen() {
-	
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
+		// pause text
+		g2.setFont(retro8Bit.deriveFont(Font.PLAIN, 50F));
 		String text = "Paused";
 		int x = getXforCenteredText(text);
-		int y = gp.screenHeight / 4;
+		int y = gp.screenHeight / 9;
 		g2.setColor(Color.WHITE);
 		g2.drawString(text, x, y);
+
+		// pause symbol
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 70F));
+		g2.drawString("||", x - (gp.tileSize), y);
 
 	}
 
