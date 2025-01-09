@@ -220,12 +220,19 @@ public class UI {
 		String text = "Paused";
 		int x = getXforCenteredText(text);
 		int y = gp.screenHeight / 9;
+		g2.setColor(Color.GRAY);
+		g2.drawString(text, x + 4, y+ 4);
 		g2.setColor(Color.WHITE);
 		g2.drawString(text, x, y);
+		
+
 
 		// pause symbol
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 70F));
-		g2.drawString("||", x - (gp.tileSize), y);
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
+		g2.setColor(Color.GRAY);
+		g2.drawString("||", x - (gp.tileSize) + 4, y -5 +4 );
+		g2.setColor(Color.WHITE);
+		g2.drawString("||", x - (gp.tileSize), y - 5);
 
 	}
 
