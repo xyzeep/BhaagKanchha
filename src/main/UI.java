@@ -224,7 +224,7 @@ public class UI {
 		g2.drawString(text, x + 4, y+ 4);
 		g2.setColor(Color.WHITE);
 		g2.drawString(text, x, y);
-		
+		;
 
 
 		// pause symbol
