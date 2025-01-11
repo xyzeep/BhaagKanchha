@@ -47,7 +47,7 @@ public class Player extends Entity {
 		worldY = screenY;
 		speed = 5;
 		jumpSpeed = 6;
-		
+
 		// PLAYER STATUS
 		maxLife = 6; // one life means half-heart 2 lives means one heart
 		life = maxLife;
@@ -72,11 +72,11 @@ public class Player extends Entity {
 
 		// CHECK FOR sideCollision, collisionOn, and canJump
 		gp.cChecker.checkTile(this); // checks for collisionOn and canJump
-		
+
 		// CHECK OBJECTS COLLISION
 		int objIndex = gp.cChecker.checkObject(this);
 		pickUpObject(objIndex);
-		
+
 		// CHECK EVENT
 		gp.eHandler.checkEvent();
 
@@ -149,7 +149,7 @@ public class Player extends Entity {
 				screenY += jumpSpeed;
 			}
 		}
-		
+
 		if (worldX >= 7580) {
 			gp.stopMusic();
 			gp.ui.gameFinished = true;
@@ -168,9 +168,8 @@ public class Player extends Entity {
 			case "Blue_Potion":
 				gp.playSoundEffect(3);
 				gp.ui.messageOn = true;
-				gp.ui.showMessage("Speed++");
+				gp.ui.message = "speed ++";
 				gp.obj[i] = null;
-
 				speed += 4;
 
 				break;
@@ -178,9 +177,20 @@ public class Player extends Entity {
 			case "Star":
 				gp.obj[i] = null;
 				gp.ui.messageOn = true;
-				gp.ui.showMessage("star +1");
+				gp.ui.message = "star +1";
+				break;
+
+			case "Heal":
+				
+				if (gp.player.life < 6) {
+					gp.obj[i] = null;
+					gp.ui.messageOn = true;
+					gp.player.life++;
+					gp.ui.message = "Life +";
+				}
 				break;
 			}
+
 		}
 
 	}

@@ -79,6 +79,14 @@ public class UI {
 		// PLAY STATE
 		if (gp.gameState == gp.playState) {
 			drawPlayerLife();
+			if (messageOn == true) {
+				messageCounter++;
+				showMessage();
+				if(messageCounter >= 60) {
+					messageCounter = 0;
+					messageOn = false;
+				}
+			}
 		}
 
 		// PAUSE STATE
@@ -130,9 +138,15 @@ public class UI {
 		}
 	}
 
-	public void showMessage(String text) {
-		message = text;
-		messageOn = true;
+	public void showMessage() {
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setFont(maruMonica);
+		//window
+	
+	
+		g2.setColor(Color.white);
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
+		g2.drawString(message, gp.tileSize / 2,  gp.tileSize * 2);
 	}
 
 	public void drawTitleScreen() {

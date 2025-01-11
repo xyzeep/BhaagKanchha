@@ -1,6 +1,8 @@
 package main;
 
 import entity.NPC_Bob;
+import object.OBJ_Heal;
+import object.OBJ_Heart;
 import object.OBJ_Potion;
 import object.OBJ_Star;
 
@@ -30,19 +32,23 @@ public class AssetSetter {
 		gp.obj[4] = new OBJ_Star(gp);
 		gp.obj[4].worldX = 58 * gp.tileSize;
 		gp.obj[4].worldY = 4 * gp.tileSize;
+		
+		gp.obj[5] = new OBJ_Heal(gp);
+		gp.obj[5].worldX = 30 * gp.tileSize;
+		gp.obj[5].worldY = 5 * gp.tileSize;
 	}
 
 	public void setNPC() {
-		gp.npc[0] = new NPC_Bob(gp);
-		gp.npc[0].worldX = 8 * gp.tileSize;
-		gp.npc[0].worldY = 5 * gp.tileSize;
-		gp.npc[0].screenY = gp.npc[0].worldY;
-		
+//		gp.npc[0] = new NPC_Bob(gp);
+//		gp.npc[0].worldX = 8 * gp.tileSize;
+//		gp.npc[0].worldY = 5 * gp.tileSize;
+//		gp.npc[0].screenY = gp.npc[0].worldY;
+//		
 		
 		gp.npc[1] = new NPC_Bob(gp);
 		gp.npc[1].worldX = 20 * gp.tileSize;
 		gp.npc[1].worldY = 6 * gp.tileSize;
-		gp.npc[1].screenY = gp.npc[0].worldY;
+		gp.npc[1].screenY = gp.npc[1].worldY;
 
 	}
 

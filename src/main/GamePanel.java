@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -225,12 +226,11 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		if (keyH.toggleDebug) {
 			long drawEnd = System.nanoTime();
 			long passed = drawEnd - drawStart;
-
+			g2.setFont(new Font("Arial", Font.BOLD, 40));
 			g2.setColor(Color.WHITE);
 			g2.drawString("Draw time: " + passed, 50, 200);
 
 		}
-
 		// ##########################
 
 		g2.dispose(); // the program still works without this line but this is a good practice to save
