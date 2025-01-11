@@ -4,6 +4,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 import entity.Entity;
@@ -40,6 +43,14 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	// because the total worldWidth is each
 	// // tile's size * no. of cols in world
 
+	// for full screen
+	int screenWidth2 = screenWidth;
+	int screenHeight2 = screenHeight;
+	BufferedImage tempScreen;
+	Graphics2D g2;
+
+	public boolean fullScreenOn = false;
+	
 	// GAME FPS
 	int FPS = 60;
 
@@ -58,11 +69,9 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public AssetSetter aSetter = new AssetSetter(this);
 
 	public UI ui = new UI(this);
-	
+
 	public EventHandler eHandler = new EventHandler(this);
-	
-	
-	
+
 	// The most important thing in a 2D/3D game is the existence of time.
 	public Thread gameThread; // thread is something you can start and stop. Once the thread starts, it keeps
 	// the game running(repeat a set a task) until we stop it.
@@ -81,6 +90,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public final int playState = 1;
 	public final int pauseState = 2;
 
+
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.BLACK);
@@ -95,7 +105,15 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 //		playMusic(0); // don't want music in titleScreen
 		gameState = titleState;
 
+		// full screen
+		tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB_PRE);
+		g2 = (Graphics2D) tempScreen.getGraphics();
+
+
 	}
+
+	// the full screen logic goes thru 2 steps. first everything will be drawn in
+	// tempScreen BTS and then in Jpanel
 
 	public void startGameThread() {
 
@@ -132,7 +150,9 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 			// will figure it out soon i promise
 			if (delta >= 1) {
 				update();
-				repaint();
+//				repaint();
+				drawToTempScreen();
+				drawToScreen();
 				delta--;
 				drawCount++; // whenever the screen is repainted, the drawCounrter increases by 1
 			}
@@ -145,6 +165,12 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 				timer = 0;
 			}
 		}
+	}
+
+	public void drawToScreen() {
+		Graphics g = getGraphics();
+		g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
+		g.dispose();
 	}
 
 	public void update() {
@@ -165,18 +191,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 	}
 
-	public void paintComponent(Graphics g) {
-		// paintComponent() is a part of the java swing framework
-		// Graphics is a class that has many helpful functions to draw objects on the
-		// screen
-		super.paintComponent(g); // super here means the parent (JPanel) class of this (GamePanel) class
-
-		// Graphics2D class extends the Graphics class to providemore sophisticated
-		// control over geometry, coordinate transformations, color management, and text
-		// layout
-
-		Graphics2D g2 = (Graphics2D) g; // so this means we changed the Graphics g to this Graphics2D class
-
+	public void drawToTempScreen() {
 		// DEBUGG
 		long drawStart = 0;
 
@@ -187,17 +202,13 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		// TITLE SCREEN
 		if (gameState == titleState) {
 			ui.draw(g2);
-			
-		
+
 		}
 
 		// others
-		else{
+		else {
 			// TILES
 			tileM.draw(g2);
-			
-			
-
 
 			// OBJECT
 			for (int i = 0; i < obj.length; i++) {
@@ -214,14 +225,12 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 			// PLAYER
 			player.draw(g2);
-			
-			
+
 			// UI
 			ui.draw(g2);
-			
-			
+
 		}
-		
+
 		// debug
 		if (keyH.toggleDebug) {
 			long drawEnd = System.nanoTime();
@@ -229,12 +238,27 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 			g2.setFont(new Font("Arial", Font.BOLD, 40));
 			g2.setColor(Color.WHITE);
 			g2.drawString("Draw time: " + passed, 50, 200);
+			g2.drawString("FPS: " + currentFPS, 50, 200 + tileSize);
+			
+			setFullScreen();
 
 		}
 		// ##########################
+	}
 
-		g2.dispose(); // the program still works without this line but this is a good practice to save
-						// some memory
+	
+	public void setFullScreen() {
+		// GET SCREEN
+
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice(); // these two lines are to get the local screen's info
+		gd.setFullScreenWindow(Main.window);
+		
+
+		
+		// get full screen width and height
+		screenWidth2 = Main.window.getWidth();
+		screenHeight2 = Main.window.getHeight();
 	}
 
 	public void playMusic(int i) {

@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener { // KeyListener is the interface for receiving keyboard
 													// events(keystrokes)
 
-	public boolean upPressed, leftPressed, rightPressed;
+	public boolean upPressed, leftPressed, rightPressed, enterPressed;
 	GamePanel gp;
 
 	// debug
@@ -54,7 +54,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 
 		}
 
-		// PAUSE STATE
+		// switch between play state and pause state in game
 		if (code == KeyEvent.VK_ESCAPE) {
 			if (gp.gameState == gp.playState) {
 				gp.gameState = gp.pauseState;
@@ -62,7 +62,31 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 				gp.gameState = gp.playState;
 			}
 		}
+		
+		if (gp.gameState == gp.pauseState) {
+			
+			if ( code == KeyEvent.VK_W) {
+				gp.playSoundEffect(5);
+				gp.ui.commandNum --;
+				if (gp.ui.commandNum < 0) {
+					gp.ui.commandNum = 4;
+				}
+			}
+			if ( code == KeyEvent.VK_S) {
+				gp.playSoundEffect(5);
+				gp.ui.commandNum ++;
+				if (gp.ui.commandNum > 4) {
+					gp.ui.commandNum = 0;
+				}
+				
+			}	
+			
+			if (code == KeyEvent.VK_ENTER) {
+				enterPressed = true;
 
+			}
+		}
+		
 		// TITLE STATE
 		if (gp.gameState == gp.titleState) {
 			
