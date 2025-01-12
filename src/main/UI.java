@@ -67,10 +67,12 @@ public class UI {
 	public void draw(Graphics2D g2) {
 
 		this.g2 = g2;
-
+		g2.setFont(qaaxee);
 		// this makes out texts smooth and pretty not applicable if the fotn is
 		// pixelated(like retro 8 bit)
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
 
 		// TITLE STATE
 		if (gp.gameState == gp.titleState) {
@@ -227,7 +229,7 @@ public class UI {
 
 		// options menu
 		g2.setColor(Color.white);
-		g2.setFont(maruMonica.deriveFont(Font.BOLD, 30F));
+		
 
 		// options sub window
 		int frameX = gp.tileSize * 6;
@@ -243,24 +245,58 @@ public class UI {
 			break;
 		case 1: options_fullscreenNotification(frameX, frameY);
 			break;
-		case 2:
+		case 2: options_control(frameX, frameY);
 			break;
 		}
 
 		gp.keyH.enterPressed = false;
 	}
-
+	
+	
+	public void options_control(int frameX, int frameY) {
+		int textX;
+		int textY;
+		g2.setFont(maruMonica.deriveFont(Font.PLAIN, 40F));
+		//title
+		String text = "Control";
+		textX = getXforCenteredText(text);
+		textY= frameY + gp.tileSize;
+		g2.drawString(text, textX, textY);
+		
+		textX = frameX + gp.tileSize;
+		textY += gp.tileSize* 2;
+		g2.drawString("Move", textX, textY); textY += gp.tileSize;
+	
+		g2.drawString("Confirm", textX, textY); textY += gp.tileSize;
+		g2.drawString("Pause", textX, textY); textY += gp.tileSize;
+		
+		
+		textY += gp.tileSize * 2;
+		// back
+		g2.drawString("Back", textX, textY);
+		
+		textX = frameX + gp.tileSize * 5;
+		textY = frameY + gp.tileSize * 3;
+		g2.drawString("W A D", textX, textY); textY += gp.tileSize;
+		g2.drawString("Enter", textX, textY); textY += gp.tileSize;
+		g2.drawString("ESC", textX, textY); textY += gp.tileSize;
+		
+		
+		
+		
+	}
+	
 	public void optionsTop(int frameX, int frameY) {
 
 		int textX;
 		int textY;
-
+		g2.setFont(maruMonica.deriveFont(Font.PLAIN, 40F));
 		
 		// TITLE
 		String text = "Paused";
 		textX = getXforCenteredText(text);
 		textY = frameY + gp.tileSize;
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 40F));
+		
 		g2.drawString(text, textX, textY);
 
 		// FULL SCREEN on/off
@@ -303,6 +339,10 @@ public class UI {
 			g2.drawString("Controls", textX, textY);
 			if (commandNum == 3) {
 				g2.drawString(">", textX - gp.tileSize / 2, textY);
+				if(gp.keyH.enterPressed == true) {
+					subState = 2;
+					commandNum = 0;
+				}
 			}
 
 			// End game
@@ -346,7 +386,7 @@ public class UI {
 	
 	
 	public void options_fullscreenNotification(int frameX, int frameY) {
-		
+		g2.setFont(maruMonica.deriveFont(Font.PLAIN, 40F));
 		int textX  = frameX + gp.tileSize;
 		int textY = frameY + gp.tileSize* 3;
 		notificationMsg = "The changes will take\neffect after a restart";
