@@ -64,24 +64,70 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 		}
 
 		// PAUSE STATE
+		switch(gp.ui.subState) {
+		case 0: maxCommandNum = 5; break;
+		case 1: maxCommandNum = 0; break;
+		case 2: maxCommandNum = 0; break;
+		case 3: maxCommandNum = 1; break;
+		}
 		if (gp.gameState == gp.pauseState) {
-			maxCommandNum = 4;
-			if (code == KeyEvent.VK_W) {
-				gp.playSoundEffect(5);
-				gp.ui.commandNum--;
-				if (gp.ui.commandNum < 0) {
-					gp.ui.commandNum = maxCommandNum;
+			
+			if(gp.ui.subState == 0) {
+			
+				if (code == KeyEvent.VK_W) {
+					gp.playSoundEffect(5);
+					gp.ui.commandNum--;
+					if (gp.ui.commandNum < 0) {
+						gp.ui.commandNum = maxCommandNum;
+					}
+				}
+				if (code == KeyEvent.VK_S) {
+					gp.playSoundEffect(5);
+					gp.ui.commandNum++;
+					if (gp.ui.commandNum > maxCommandNum) {
+						gp.ui.commandNum = 0;
+					}
+
 				}
 			}
-			if (code == KeyEvent.VK_S) {
-				gp.playSoundEffect(5);
-				gp.ui.commandNum++;
-				if (gp.ui.commandNum > maxCommandNum) {
-					gp.ui.commandNum = 0;
+			
+			if(gp.ui.subState == 1 || gp.ui.subState == 2 ) {
+				if (code == KeyEvent.VK_W) {
+					gp.playSoundEffect(5);
+					gp.ui.commandNum--;
+					if (gp.ui.commandNum < 0) {
+						gp.ui.commandNum = maxCommandNum;
+					}
 				}
+				if (code == KeyEvent.VK_S) {
+					gp.playSoundEffect(5);
+					gp.ui.commandNum++;
+					if (gp.ui.commandNum > maxCommandNum) {
+						gp.ui.commandNum = 0;
+					}
 
+				}
 			}
 
+			if(gp.ui.subState == 3) {
+			
+				if (code == KeyEvent.VK_W) {
+					gp.playSoundEffect(5);
+					gp.ui.commandNum--;
+					if (gp.ui.commandNum < 0) {
+						gp.ui.commandNum = maxCommandNum;
+					}
+				}
+				if (code == KeyEvent.VK_S) {
+					gp.playSoundEffect(5);
+					gp.ui.commandNum++;
+					if (gp.ui.commandNum > maxCommandNum) {
+						gp.ui.commandNum = 0;
+					}
+
+				}
+			}
+			
 			if (code == KeyEvent.VK_ENTER) {
 				enterPressed = true;
 
@@ -121,7 +167,9 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 
 		// TITLE STATE
 		if (gp.gameState == gp.titleState) {
-			maxCommandNum = 3;
+			switch(gp.ui.subState) {
+			case 0: maxCommandNum = 3;
+			}
 			if (code == KeyEvent.VK_W) {
 				gp.playSoundEffect(5);
 				gp.ui.commandNum--;

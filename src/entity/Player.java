@@ -17,7 +17,10 @@ public class Player extends Entity {
 	private boolean isJumping = false;
 
 	private int jumpCounter = 0;
-
+	boolean takeDamage = true;
+	int damageCounter = 0;
+	int damageInterval = 16;
+	
 	public Player(GamePanel gp, KeyHandler keyH) {
 
 		super(gp);
@@ -158,6 +161,22 @@ public class Player extends Entity {
 
 	}
 
+	public void takeDamage() {
+		if(life > 0) {
+			damageCounter++;
+			if (takeDamage) {
+				takeDamage = false;
+				gp.playSoundEffect(6);
+				life--;
+			}
+			if(damageCounter > damageInterval) {
+				takeDamage = true;
+				damageCounter = 0;
+			}
+				
+		}
+	}
+	
 	public void pickUpObject(int i) {
 
 		if (i != 999) {
@@ -181,7 +200,7 @@ public class Player extends Entity {
 				break;
 
 			case "Heal":
-				
+
 				if (gp.player.life < 6) {
 					gp.obj[i] = null;
 					gp.ui.messageOn = true;
@@ -234,4 +253,5 @@ public class Player extends Entity {
 		g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
 		g2.drawRect(screenX + gp.tileSize, screenY + solidArea.y, gp.tileSize, gp.tileSize);
 	}
+
 }

@@ -46,7 +46,7 @@ public class EventHandler {
 
 		// when you hit npc bob1
 		if (hit(gp.npc[1].worldX / gp.tileSize, gp.npc[1].worldY / gp.tileSize, "any") == true) {
-			takeDamage(gp.npc[1].worldX / gp.tileSize, gp.npc[1].worldY / gp.tileSize);
+			takeDamage();
 		}
 		
 	}
@@ -85,13 +85,16 @@ public class EventHandler {
 
 	}
 
-	public void takeDamage(int col, int row) {
+	public void takeDamage() {
 		
-		if(takeDamage) {
-			gp.playSoundEffect(6);
-			gp.player.life--;
-			takeDamage = false;
+		if(gp.player.life > 0) {
+			if(takeDamage) {
+				gp.playSoundEffect(6);
+				gp.player.life--;
+				takeDamage = false;
+			}
 		}
+		
 	}
 
 //	public void healPlayer(int col, int row) {

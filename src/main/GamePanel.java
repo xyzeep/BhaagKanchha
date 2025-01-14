@@ -45,7 +45,8 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 	// for full screen
 	int screenWidth2 = screenWidth;
-	int screenHeight2 = screenHeight;
+	int screenHeight2= screenHeight;
+
 	BufferedImage tempScreen;
 	Graphics2D g2;
 
@@ -71,6 +72,8 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public UI ui = new UI(this);
 
 	public EventHandler eHandler = new EventHandler(this);
+	
+	public Config config = new Config(this);
 
 	// The most important thing in a 2D/3D game is the existence of time.
 	public Thread gameThread; // thread is something you can start and stop. Once the thread starts, it keeps
@@ -100,15 +103,20 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	}
 
 	public void setupGame() {
+		config.loadConfig();
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
 		aSetter.setNPC();
 //		playMusic(0); // don't want music in titleScreen
 		gameState = titleState;
 
 		// full screen
-		tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB_PRE);
+		tempScreen = new BufferedImage(screenWidth2, screenHeight2, BufferedImage.TYPE_INT_ARGB_PRE);
 		g2 = (Graphics2D) tempScreen.getGraphics();
-
+		
+		
+		if(fullScreenOn == true) {
+			setFullScreen();
+		}
 
 	}
 
@@ -259,6 +267,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		// get full screen width and height
 		screenWidth2 = Main.window.getWidth();
 		screenHeight2 = Main.window.getHeight();
+		
 	}
 
 	public void playMusic(int i) {

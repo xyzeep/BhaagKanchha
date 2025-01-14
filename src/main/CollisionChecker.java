@@ -43,8 +43,9 @@ public class CollisionChecker {
 												// collisionOn
 												// is true
 			}
-			if (gp.tileM.tile[tileNum2].deadly) {
-				// die function
+			if (gp.tileM.tile[tileNum1].deadly) {
+				gp.player.takeDamage();
+
 			}
 
 			break;
@@ -59,7 +60,8 @@ public class CollisionChecker {
 				 entity.canJump = true;
 			}
 			if (gp.tileM.tile[tileNum2].deadly) {
-				// die function
+				gp.player.takeDamage();
+
 			}
 			break;
 
@@ -85,6 +87,10 @@ public class CollisionChecker {
 			tileNum4 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow]; // Check Right Hand
 			if (gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
 				entity.sideCollision = true;
+				if (gp.tileM.tile[tileNum3].deadly) {
+					gp.player.takeDamage();
+
+				}
 			}
 			break;
 
@@ -94,6 +100,9 @@ public class CollisionChecker {
 			tileNum4 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow]; // Check Right Hand
 			if (gp.tileM.tile[tileNum3].collision == true || gp.tileM.tile[tileNum4].collision == true) {
 				entity.sideCollision = true;
+				if (gp.tileM.tile[tileNum4].deadly) {
+					gp.player.takeDamage();
+				}
 			}
 			break;
 		}

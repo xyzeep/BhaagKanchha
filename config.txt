@@ -1,0 +1,3 @@
+FullScreen: Off
+Music: 1
+Sound: 3
