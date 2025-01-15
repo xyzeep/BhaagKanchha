@@ -16,9 +16,9 @@ public class SuperObject {
 	public Rectangle solidArea = new Rectangle(10, 10, 38, 38);
 	public int solidAreaDefaultX = solidArea.x;
 	public int solidAreaDefaultY = solidArea.y;
-	
+
 	UtilityTool uTool = new UtilityTool();
-	
+
 	// draw the object
 	public void draw(Graphics2D g2, GamePanel gp) {
 		int screenX = worldX - gp.player.worldX + gp.player.screenX;

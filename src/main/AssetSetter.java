@@ -19,8 +19,6 @@ public class AssetSetter {
 		gp.obj[0].worldX = 17 * gp.tileSize;
 		gp.obj[0].worldY = 5 * gp.tileSize;
 
-
-
 		gp.obj[2] = new OBJ_Star(gp);
 		gp.obj[2].worldX = 20 * gp.tileSize;
 		gp.obj[2].worldY = 6 * gp.tileSize;
@@ -32,7 +30,7 @@ public class AssetSetter {
 		gp.obj[4] = new OBJ_Star(gp);
 		gp.obj[4].worldX = 58 * gp.tileSize;
 		gp.obj[4].worldY = 4 * gp.tileSize;
-		
+
 		gp.obj[5] = new OBJ_Heal(gp);
 		gp.obj[5].worldX = 30 * gp.tileSize;
 		gp.obj[5].worldY = 5 * gp.tileSize;
@@ -44,7 +42,7 @@ public class AssetSetter {
 //		gp.npc[0].worldY = 5 * gp.tileSize;
 //		gp.npc[0].screenY = gp.npc[0].worldY;
 //		
-		
+
 		gp.npc[1] = new NPC_Bob(gp);
 		gp.npc[1].worldX = 20 * gp.tileSize;
 		gp.npc[1].worldY = 6 * gp.tileSize;

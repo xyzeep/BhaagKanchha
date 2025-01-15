@@ -19,7 +19,7 @@ public class TileManager {
 	public int mapTileNum[][];
 	BufferedImage bgImage;
 
-	public TileManager(GamePanel gp) { 
+	public TileManager(GamePanel gp) {
 		this.gp = gp;
 
 		tile = new Tile[10];
@@ -53,7 +53,7 @@ public class TileManager {
 		setup(4, "platformBlock", true, false);
 
 		setup(5, "apple", false, false);
-		
+
 		setup(6, "crate", true, false);
 
 	}

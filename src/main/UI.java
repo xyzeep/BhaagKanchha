@@ -439,8 +439,7 @@ public class UI {
 		g2.drawRect(textX, textY, 120, gp.tileSize / 2);
 		volumeWidth = gp.se.volumeScale * 24;
 		g2.fillRect(textX, textY, volumeWidth, 24);
-		
-		
+
 		gp.config.saveConfig(); // everytime we open the options menu, config is saved
 	}
 

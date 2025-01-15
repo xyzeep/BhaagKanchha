@@ -3,10 +3,9 @@ package main;
 import javax.swing.JFrame;
 
 public class Main {
-	
+
 	public static JFrame window;
-	
-	
+
 	public static void main(String[] args) {
 
 		window = new JFrame();
@@ -18,14 +17,14 @@ public class Main {
 
 		window.add(gamePanel); // adding a GamePanel wwwclass to the window
 		gamePanel.config.loadConfig();
-		if(gamePanel.fullScreenOn == true) {
+		if (gamePanel.fullScreenOn == true) {
 			window.setUndecorated(true); // clean look
 		}
-		
+
 		window.pack();
 
 		window.setLocationRelativeTo(null); // to center window on the screen
-		window.setVisible(true); 
+		window.setVisible(true);
 
 		gamePanel.setupGame();
 

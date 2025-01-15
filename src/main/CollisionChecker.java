@@ -4,7 +4,7 @@ import entity.Entity;
 import entity.Player;
 //import entity.Entity;
 
-public class CollisionChecker { 
+public class CollisionChecker {
 
 	GamePanel gp;
 
@@ -16,19 +16,14 @@ public class CollisionChecker {
 	public void checkTile(Entity entity) {
 
 		int entityLeftWorldX = entity.worldX + entity.solidArea.x;
-	    int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
-	    int entityTopScreenY = entity.screenY + entity.solidArea.y;
-	    int entityBottomScreenY = entity.screenY + entity.solidArea.y + entity.solidArea.height;
-	    
+		int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
+		int entityTopScreenY = entity.screenY + entity.solidArea.y;
+		int entityBottomScreenY = entity.screenY + entity.solidArea.y + entity.solidArea.height;
 
-	    
-	    
-	    int entityLeftCol = entityLeftWorldX / gp.tileSize;
-	    int entityRightCol = (entityRightWorldX - 1) / gp.tileSize;  // Subtract 1 to avoid crossing into next tile
-	    int entityTopRow = entityTopScreenY / gp.tileSize;
-	    int entityBottomRow = (entityBottomScreenY - 1) / gp.tileSize;  // Subtract 1 to avoid crossing into next tile
-	
-
+		int entityLeftCol = entityLeftWorldX / gp.tileSize;
+		int entityRightCol = (entityRightWorldX - 1) / gp.tileSize; // Subtract 1 to avoid crossing into next tile
+		int entityTopRow = entityTopScreenY / gp.tileSize;
+		int entityBottomRow = (entityBottomScreenY - 1) / gp.tileSize; // Subtract 1 to avoid crossing into next tile
 
 		int tileNum1, tileNum2, tileNum3, tileNum4; // tileNum1 and tileNum2 are for up and down directions. tileNum3
 		// and tileNum4 are for left right side tiles
@@ -50,14 +45,14 @@ public class CollisionChecker {
 
 			break;
 		case "down":
-			
+
 			entityBottomRow = (entityBottomScreenY + entity.jumpSpeed) / gp.tileSize;
 			tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
 			tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
-			
+
 			if (gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
-				 entity.upDownCollision = true;
-				 entity.canJump = true;
+				entity.upDownCollision = true;
+				entity.canJump = true;
 			}
 			if (gp.tileM.tile[tileNum2].deadly) {
 				gp.player.takeDamage();
@@ -66,20 +61,18 @@ public class CollisionChecker {
 			break;
 
 		}
-		
-		
-		
+
 		// Re-assign values
 		entityLeftWorldX = entity.worldX + entity.solidArea.x;
-	    entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
-	    entityTopScreenY = entity.screenY + entity.solidArea.y;
-	    entityBottomScreenY = entity.screenY + entity.solidArea.y + entity.solidArea.height;
-	    
-	    entityLeftCol = entityLeftWorldX / gp.tileSize;
-	    entityRightCol = (entityRightWorldX - 1) / gp.tileSize;  // Subtract 1 to avoid crossing into next tile
-	    entityTopRow = entityTopScreenY / gp.tileSize;
-	    entityBottomRow = (entityBottomScreenY - 1) / gp.tileSize;  // Subtract 1 to avoid crossing into next tile
-		
+		entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
+		entityTopScreenY = entity.screenY + entity.solidArea.y;
+		entityBottomScreenY = entity.screenY + entity.solidArea.y + entity.solidArea.height;
+
+		entityLeftCol = entityLeftWorldX / gp.tileSize;
+		entityRightCol = (entityRightWorldX - 1) / gp.tileSize; // Subtract 1 to avoid crossing into next tile
+		entityTopRow = entityTopScreenY / gp.tileSize;
+		entityBottomRow = (entityBottomScreenY - 1) / gp.tileSize; // Subtract 1 to avoid crossing into next tile
+
 		switch (entity.horizontalDirection) {
 		case "left":
 			entityLeftCol = (entityLeftWorldX - entity.speed) / gp.tileSize;
@@ -111,9 +104,6 @@ public class CollisionChecker {
 		entityRightCol = entityRightWorldX / gp.tileSize;
 
 	}
-	
-	
-	
 
 	public int checkObject(Entity entity) {
 
@@ -207,10 +197,10 @@ public class CollisionChecker {
 
 		return index;
 	}
-	
+
 	// NPC OR MONSTER COLLISION
 	public int checkEntity(Entity entity, Entity[] target) {
 		return 1;
 	}
-	
+
 }

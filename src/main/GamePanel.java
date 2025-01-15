@@ -45,13 +45,13 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 	// for full screen
 	int screenWidth2 = screenWidth;
-	int screenHeight2= screenHeight;
+	int screenHeight2 = screenHeight;
 
 	BufferedImage tempScreen;
 	Graphics2D g2;
 
 	public boolean fullScreenOn = false;
-	
+
 	// GAME FPS
 	int FPS = 60;
 
@@ -72,7 +72,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public UI ui = new UI(this);
 
 	public EventHandler eHandler = new EventHandler(this);
-	
+
 	public Config config = new Config(this);
 
 	// The most important thing in a 2D/3D game is the existence of time.
@@ -92,7 +92,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public final int titleState = 0;
 	public final int playState = 1;
 	public final int pauseState = 2;
-
+	public final int gameOverState = 3;
 
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -112,9 +112,8 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		// full screen
 		tempScreen = new BufferedImage(screenWidth2, screenHeight2, BufferedImage.TYPE_INT_ARGB_PRE);
 		g2 = (Graphics2D) tempScreen.getGraphics();
-		
-		
-		if(fullScreenOn == true) {
+
+		if (fullScreenOn == true) {
 			setFullScreen();
 		}
 
@@ -247,27 +246,24 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 			g2.setColor(Color.WHITE);
 			g2.drawString("Draw time: " + passed, 50, 200);
 			g2.drawString("FPS: " + currentFPS, 50, 200 + tileSize);
-			
+
 			setFullScreen();
 
 		}
 		// ##########################
 	}
 
-	
 	public void setFullScreen() {
 		// GET SCREEN
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gd = ge.getDefaultScreenDevice(); // these two lines are to get the local screen's info
 		gd.setFullScreenWindow(Main.window);
-		
 
-		
 		// get full screen width and height
 		screenWidth2 = Main.window.getWidth();
 		screenHeight2 = Main.window.getHeight();
-		
+
 	}
 
 	public void playMusic(int i) {

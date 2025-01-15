@@ -9,7 +9,7 @@ public class EventHandler {
 	GamePanel gp;
 
 	EventRect eventRect[][];
-	
+
 	public int damageInterval = 35;
 	public int damageCounter = 0;
 	public boolean takeDamage = true;
@@ -17,12 +17,13 @@ public class EventHandler {
 	public EventHandler(GamePanel gp) {
 		this.gp = gp;
 
-		eventRect = new EventRect[gp.maxWorldCol][gp.maxWorldRow]; // 2px rectangle because we dont want player to die that easily ofc
-										// ahahhahah
+		eventRect = new EventRect[gp.maxWorldCol][gp.maxWorldRow]; // 2px rectangle because we dont want player to die
+																	// that easily ofc
+		// ahahhahah
 		int col = 0;
 		int row = 0;
-		while(col < gp.maxWorldCol && row < gp.maxScreenRow) {
-			
+		while (col < gp.maxWorldCol && row < gp.maxScreenRow) {
+
 			eventRect[col][row] = new EventRect();
 			eventRect[col][row].x = 23;
 			eventRect[col][row].y = 23;
@@ -30,15 +31,13 @@ public class EventHandler {
 			eventRect[col][row].height = 2;
 			eventRect[col][row].eventRectDefaultX = eventRect[col][row].x;
 			eventRect[col][row].eventRectDefaultY = eventRect[col][row].y;
-			
+
 			col++;
-			if ( col == gp.maxWorldCol) {
+			if (col == gp.maxWorldCol) {
 				col = 0;
-				row ++;
+				row++;
 			}
 		}
-		
-		
 
 	}
 
@@ -48,14 +47,13 @@ public class EventHandler {
 		if (hit(gp.npc[1].worldX / gp.tileSize, gp.npc[1].worldY / gp.tileSize, "any") == true) {
 			takeDamage();
 		}
-		
+
 	}
 
 	public boolean hit(int col, int row, String reqDirection) {
 		boolean hit = false;
 		damageCounter++;
-		
-		
+
 		// getting player's current solid area position
 		gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
 		gp.player.solidArea.y = gp.player.screenY + gp.player.solidArea.y;
@@ -75,26 +73,26 @@ public class EventHandler {
 		gp.player.solidArea.y = gp.player.solidAreaDefaultY;
 		eventRect[col][row].x = eventRect[col][row].eventRectDefaultX;
 		eventRect[col][row].y = eventRect[col][row].eventRectDefaultY;
-		
-		if(damageCounter > damageInterval) {
+
+		if (damageCounter > damageInterval) {
 			takeDamage = true;
 			damageCounter = 0;
 		}
-		
+
 		return hit;
 
 	}
 
 	public void takeDamage() {
-		
-		if(gp.player.life > 0) {
-			if(takeDamage) {
+
+		if (gp.player.life > 0) {
+			if (takeDamage) {
 				gp.playSoundEffect(6);
 				gp.player.life--;
 				takeDamage = false;
 			}
 		}
-		
+
 	}
 
 //	public void healPlayer(int col, int row) {

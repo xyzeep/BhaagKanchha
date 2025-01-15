@@ -20,7 +20,7 @@ public class Player extends Entity {
 	boolean takeDamage = true;
 	int damageCounter = 0;
 	int damageInterval = 16;
-	
+
 	public Player(GamePanel gp, KeyHandler keyH) {
 
 		super(gp);
@@ -159,24 +159,32 @@ public class Player extends Entity {
 
 		}
 
+		if (life <= 0) {
+			gp.gameState = gp.gameOverState;
+			System.out.println("Game Over");
+			gp.stopMusic();
+			gp.gameState = gp.titleState; // just for now the game returns to title screen for now!!!
+
+		}
+
 	}
 
 	public void takeDamage() {
-		if(life > 0) {
+		if (life > 0) {
 			damageCounter++;
 			if (takeDamage) {
 				takeDamage = false;
 				gp.playSoundEffect(6);
 				life--;
 			}
-			if(damageCounter > damageInterval) {
+			if (damageCounter > damageInterval) {
 				takeDamage = true;
 				damageCounter = 0;
 			}
-				
+
 		}
 	}
-	
+
 	public void pickUpObject(int i) {
 
 		if (i != 999) {
