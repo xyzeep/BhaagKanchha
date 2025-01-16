@@ -252,7 +252,13 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		}
 		// ##########################
 	}
-
+	
+	public void restart() {
+		player.setDefaultValues();
+		aSetter.setNPC();
+		aSetter.setObject();
+	}
+	
 	public void setFullScreen() {
 		// GET SCREEN
 

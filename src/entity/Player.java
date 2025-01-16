@@ -163,8 +163,6 @@ public class Player extends Entity {
 			gp.gameState = gp.gameOverState;
 			System.out.println("Game Over");
 			gp.stopMusic();
-			gp.gameState = gp.titleState; // just for now the game returns to title screen for now!!!
-
 		}
 
 	}

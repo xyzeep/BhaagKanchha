@@ -204,7 +204,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					gp.playMusic(0);
 					break;
 
-				case 1: // options
+				case 1: // maps
 					// do later
 					break;
 
@@ -218,6 +218,38 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 				}
 
 			}
+		}
+		
+		
+		if(gp.gameState == gp.gameOverState) {
+			maxCommandNum = 1;
+			if (code == KeyEvent.VK_W) {
+				gp.playSoundEffect(5);
+				gp.ui.commandNum--;
+				if (gp.ui.commandNum < 0) {
+					gp.ui.commandNum = maxCommandNum;
+				}
+			} else if (code == KeyEvent.VK_S) {
+				gp.playSoundEffect(5);
+				gp.ui.commandNum++;
+				if (gp.ui.commandNum > maxCommandNum) {
+					gp.ui.commandNum = 0;
+				}
+			}
+			
+			if (code == KeyEvent.VK_ENTER) {
+				if(gp.ui.commandNum == 0) {
+					gp.gameState = gp.playState;
+					gp.restart();
+					gp.playMusic(0);
+				}
+				else if(gp.ui.commandNum == 1) {
+					gp.gameState = gp.titleState;
+					gp.restart();
+					gp.ui.commandNum = 0;
+				}
+			}
+			
 		}
 
 	}
