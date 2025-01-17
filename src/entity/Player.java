@@ -155,8 +155,7 @@ public class Player extends Entity {
 
 		if (worldX >= 7580) {
 			gp.stopMusic();
-			gp.ui.gameFinished = true;
-
+			gp.gameState = gp.gameFinishedState;
 		}
 
 		if (life <= 0) {

@@ -28,7 +28,6 @@ public class UI {
 	public boolean messageOn = false;
 	public String message = "";
 	int messageCounter = 0;
-	public boolean gameFinished = false;
 	public int score;
 	public String notificationMsg = "";
 	public int commandNum = 0;
@@ -80,6 +79,7 @@ public class UI {
 		// PLAY STATE
 		if (gp.gameState == gp.playState) {
 			drawPlayerLife();
+			drawFPS();
 			if (messageOn == true) {
 				messageCounter++;
 				showMessage();
@@ -89,6 +89,11 @@ public class UI {
 				}
 			}
 		}
+		// GAME FINISHED STATE
+		if (gp.gameState == gp.gameFinishedState) {
+			drawGameFinishedScreen();
+			
+		}
 
 		// GAME OVER STATE
 		if (gp.gameState == gp.gameOverState) {
@@ -97,17 +102,27 @@ public class UI {
 		// PAUSE STATE
 		if (gp.gameState == gp.pauseState) {
 			drawPlayerLife();
+			drawFPS();
 			drawPauseMenu();
 		}
-
-		// WHEN THE GAME IS FINISHED
-		if (gameFinished == true) {
-			// show game finished message
-			gp.gameThread = null;
-		}
-
 	}
-
+	
+	
+	public void drawFPS() {
+		int x = gp.tileSize * 19 + 5;
+		int y = gp.tileSize - 10;
+		String text = ""+gp.currentFPS;
+		
+		if (gp.currentFPS < 60 && gp.currentFPS > 55 ) {
+			g2.setColor(Color.yellow);
+		}
+		else if (gp.currentFPS <= 55) {
+			g2.setColor(Color.RED);
+		}
+		
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 38F));
+		g2.drawString(text, x, y);
+	}
 	public void drawPlayerLife() {
 
 		int x = gp.tileSize / 2;
@@ -145,7 +160,57 @@ public class UI {
 		// window
 		g2.setColor(Color.white);
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));
-		g2.drawString(message, gp.tileSize / 2, gp.tileSize * 2);
+		g2.drawString(message, gp.tileSize / 2, gp.tileSize * 3);
+	}
+
+	public void drawGameFinishedScreen() {
+		g2.setColor(new Color(0, 0, 0, 170));
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+		int x;
+		int y;
+		String text;
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 110f));
+
+		text = "Congratulations";
+		// shadow part
+		g2.setColor(Color.black);
+		x = getXforCenteredText(text);
+		y = gp.tileSize * 4;
+		g2.drawString(text, x + 4, y + 4);
+
+		// main part
+		g2.setColor(Color.white);
+		x = getXforCenteredText(text);
+		y = gp.tileSize * 4;
+		g2.drawString(text, x, y);
+
+		// Score
+		score  = (int)gp.timeToComplete/10;
+		text = "Your score was " + score;
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40f));
+		g2.setColor(Color.white);
+		x = getXforCenteredText(text);
+		y += gp.tileSize + 20;
+		g2.drawString(text, x, y);
+
+		// replay
+		g2.setFont(g2.getFont().deriveFont(50f));
+		text = "Replay";
+		x = getXforCenteredText(text);
+		y += gp.tileSize * 4;
+		g2.drawString(text, x, y);
+		if (commandNum == 0) {
+			g2.drawString(">", x - 25, y);
+		}
+
+		// quit
+		text = "Quit";
+		y += 55;
+		g2.drawString(text, x, y);
+		if (commandNum == 1) {
+			g2.drawString(">", x - 25, y);
+		}
 	}
 
 	public void drawGameOverScreen() {
@@ -169,9 +234,8 @@ public class UI {
 		x = getXforCenteredText(text);
 		y = gp.tileSize * 4;
 		g2.drawString(text, x, y);
-		
-		
-		//retry
+
+		// retry
 		g2.setFont(g2.getFont().deriveFont(50f));
 		text = "Retry";
 		x = getXforCenteredText(text);
@@ -180,8 +244,8 @@ public class UI {
 		if (commandNum == 0) {
 			g2.drawString(">", x - 25, y);
 		}
-		
-		//quit
+
+		// quit
 		text = "Quit";
 		y += 55;
 		g2.drawString(text, x, y);
@@ -518,7 +582,7 @@ public class UI {
 		if (commandNum == 0) {
 			g2.drawString(">", textX - gp.tileSize / 2, textY);
 			if (gp.keyH.enterPressed == true) {
-				
+
 				gp.gameState = gp.titleState;
 				gp.player.setDefaultValues();
 				subState = 0;

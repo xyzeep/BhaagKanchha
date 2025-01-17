@@ -32,7 +32,9 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public final int maxScreenRow = 12;
 	public final int screenWidth = tileSize * maxScreenCol; // 1056 px
 	public final int screenHeight = tileSize * maxScreenRow; // 576 px
-
+	public double timeToComplete = 0;
+	
+	
 	// LEVEL MAP SETTINGS
 	public final int maxWorldCol = 164; // Please change this later as you make bigger maps pawan
 	public final int maxWorldRow = 12; // We wont have to change this ig because this will be fixed
@@ -93,6 +95,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public final int playState = 1;
 	public final int pauseState = 2;
 	public final int gameOverState = 3;
+	public final int gameFinishedState = 4;
 
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -165,8 +168,8 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 			}
 
 			if (timer >= 1000000000) {
-				System.out.println("FPS: " + drawCount); // to check id the function is working properly(i.e. if the
-				// game is running in 60 FPS)
+//				System.out.println("FPS: " + drawCount); // to check id the function is working properly(i.e. if the
+//				// game is running in 60 FPS)
 				currentFPS = drawCount;
 				drawCount = 0;
 				timer = 0;
@@ -183,6 +186,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public void update() {
 
 		if (gameState == playState) {
+			timeToComplete += 1;
 			// PLAYER
 			player.update();
 			// NPC
