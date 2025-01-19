@@ -33,8 +33,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public final int screenWidth = tileSize * maxScreenCol; // 1056 px
 	public final int screenHeight = tileSize * maxScreenRow; // 576 px
 	public double timeToComplete = 0;
-	
-	
+
 	// LEVEL MAP SETTINGS
 	public final int maxWorldCol = 164; // Please change this later as you make bigger maps pawan
 	public final int maxWorldRow = 12; // We wont have to change this ig because this will be fixed
@@ -96,6 +95,8 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public final int pauseState = 2;
 	public final int gameOverState = 3;
 	public final int gameFinishedState = 4;
+	public final int loginState = 5;
+	public final int signupState = 6;
 
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -103,6 +104,8 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		this.setDoubleBuffered(true); // enabling this improves rendering perfomance
 		this.addKeyListener(keyH); // so that the game panel can recognise the key strokes
 		this.setFocusable(true);
+		// to make the tabbing work
+        setFocusTraversalKeysEnabled(false);
 	}
 
 	public void setupGame() {
@@ -110,7 +113,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
 		aSetter.setNPC();
 //		playMusic(0); // don't want music in titleScreen
-		gameState = titleState;
+		gameState = signupState;
 
 		// full screen
 		tempScreen = new BufferedImage(screenWidth2, screenHeight2, BufferedImage.TYPE_INT_ARGB_PRE);
@@ -215,6 +218,11 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 			ui.draw(g2);
 
 		}
+		// TITLE SCREEN
+		if (gameState == signupState) {
+			ui.draw(g2);
+
+		}
 
 		// others
 		else {
@@ -256,13 +264,13 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		}
 		// ##########################
 	}
-	
+
 	public void restart() {
 		player.setDefaultValues();
 		aSetter.setNPC();
 		aSetter.setObject();
 	}
-	
+
 	public void setFullScreen() {
 		// GET SCREEN
 

@@ -16,6 +16,11 @@ import object.SuperObject;
 import object.OBJ_Heart;
 
 public class UI {
+	// for login and signup
+	String username = "";
+	String password = "";
+
+	boolean showPassword = false;
 
 	Player player;
 	GamePanel gp;
@@ -76,6 +81,11 @@ public class UI {
 			drawTitleScreen();
 		}
 
+		// LOGIN STATE
+		if (gp.gameState == gp.signupState) {
+			drawSignupScreen();
+		}
+
 		// PLAY STATE
 		if (gp.gameState == gp.playState) {
 			drawPlayerLife();
@@ -92,7 +102,7 @@ public class UI {
 		// GAME FINISHED STATE
 		if (gp.gameState == gp.gameFinishedState) {
 			drawGameFinishedScreen();
-			
+
 		}
 
 		// GAME OVER STATE
@@ -106,23 +116,22 @@ public class UI {
 			drawPauseMenu();
 		}
 	}
-	
-	
+
 	public void drawFPS() {
 		int x = gp.tileSize * 19 + 5;
 		int y = gp.tileSize - 10;
-		String text = ""+gp.currentFPS;
-		
-		if (gp.currentFPS < 60 && gp.currentFPS > 55 ) {
+		String text = "" + gp.currentFPS;
+
+		if (gp.currentFPS < 60 && gp.currentFPS > 55) {
 			g2.setColor(Color.yellow);
-		}
-		else if (gp.currentFPS <= 55) {
+		} else if (gp.currentFPS <= 55) {
 			g2.setColor(Color.RED);
 		}
-		
+
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 38F));
 		g2.drawString(text, x, y);
 	}
+
 	public void drawPlayerLife() {
 
 		int x = gp.tileSize / 2;
@@ -163,6 +172,89 @@ public class UI {
 		g2.drawString(message, gp.tileSize / 2, gp.tileSize * 3);
 	}
 
+	public void drawSignupScreen() {
+		// i have mentioned why this is here somewhere in the code and i am not doing it again
+		g2.setColor(new Color(0, 0, 0));
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+		
+		g2.setColor(Color.white);
+
+		g2.setStroke(new BasicStroke(4));
+		g2.drawRoundRect(gp.screenWidth / 2 - 200, gp.screenHeight / 2 - 250, 400, 500, 50, 50);
+
+
+		// REGISTER
+		g2.setFont(maruMonica.deriveFont(Font.BOLD, 50F)); // keep this line before the line that calls
+															// getXforCenteredText() method
+		String text = "Register";
+		int x = getXforCenteredText("Register");
+		int y = gp.tileSize * 2;
+		g2.drawString(text, x, y);
+
+		g2.setFont(maruMonica.deriveFont(Font.BOLD, 37F));
+		// USERNAME
+
+		g2.setColor(Color.GRAY);
+		if (commandNum == 0) {
+			g2.setColor(Color.WHITE);
+		}
+		text = "Username";
+		x = 308;
+		y += gp.tileSize + 30;
+		g2.setStroke(new BasicStroke(3));
+		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
+		g2.drawString(text, x + 10, y);
+
+		// PASSWORD
+		g2.setColor(Color.GRAY);
+		if (commandNum == 1) {
+			g2.setColor(Color.WHITE);
+		}
+		text = "Password";
+		y += gp.tileSize + 24;
+		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
+		g2.drawString(text, x + 10, y);
+
+		// PASSWORD(AGAIN)
+		g2.setColor(Color.GRAY);
+		if (commandNum == 2) {
+			g2.setColor(Color.WHITE);
+			
+		}
+		text = "Password (again)";
+		y += gp.tileSize + 24;
+		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
+		g2.drawString(text, x + 10, y);
+
+		// Register btn
+		g2.setColor(Color.WHITE);
+		text = "Register";
+		x = getXforCenteredText(text);
+		y += gp.tileSize + 24;
+		if (commandNum == 3) {
+			g2.drawString(">", x - 10, y);
+			if(gp.keyH.enterPressed) {
+				System.out.println("Register done (testing)");
+			}
+		}
+		g2.drawString(text, x + 10, y);
+
+		// back
+		text = "Back";
+		y += gp.tileSize;
+		if (commandNum == 4) {
+			g2.drawString(">", x - 10, y);
+			if(gp.keyH.enterPressed) {
+				System.out.println("Back done (test)");
+			}
+		}
+		g2.drawString("Back", x + 10, y);
+		
+		
+		// reset
+		gp.keyH.enterPressed = false;
+	}
+
 	public void drawGameFinishedScreen() {
 		g2.setColor(new Color(0, 0, 0, 170));
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
@@ -186,7 +278,7 @@ public class UI {
 		g2.drawString(text, x, y);
 
 		// Score
-		score  = (int)gp.timeToComplete/10;
+		score = (int) gp.timeToComplete / 10;
 		text = "Your score was " + score;
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40f));
 		g2.setColor(Color.white);
@@ -460,7 +552,7 @@ public class UI {
 		// FULL SCREEN on/off
 		textX = frameX + gp.tileSize;
 		textY += (int) (gp.tileSize * 1.6);
-//		System.out.println(textY);
+
 		g2.drawString("Full Screen", textX, textY);
 		if (commandNum == 0) {
 			g2.drawString(">", textX - gp.tileSize / 2, textY);
@@ -557,7 +649,7 @@ public class UI {
 	public int getXforCenteredText(String text) {
 
 		int textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-		int x = gp.screenWidth / 2 - textLength / 2;
+		int x = (gp.screenWidth / 2) - (textLength / 2);
 		return x;
 	}
 
