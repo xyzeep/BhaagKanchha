@@ -113,7 +113,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
 		aSetter.setNPC();
 //		playMusic(0); // don't want music in titleScreen
-		gameState = signupState;
+		gameState = loginState;
 
 		// full screen
 		tempScreen = new BufferedImage(screenWidth2, screenHeight2, BufferedImage.TYPE_INT_ARGB_PRE);

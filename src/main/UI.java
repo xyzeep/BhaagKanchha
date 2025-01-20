@@ -81,9 +81,14 @@ public class UI {
 			drawTitleScreen();
 		}
 
-		// LOGIN STATE
+		// signup STATE
 		if (gp.gameState == gp.signupState) {
 			drawSignupScreen();
+		}
+		
+		// login state
+		if (gp.gameState == gp.loginState) {
+			drawLoginScreen();
 		}
 
 		// PLAY STATE
@@ -172,6 +177,81 @@ public class UI {
 		g2.drawString(message, gp.tileSize / 2, gp.tileSize * 3);
 	}
 
+	
+	public void drawLoginScreen() {
+		// i have mentioned why this is here somewhere in the code and i am not doing it again
+				g2.setColor(new Color(0, 0, 0));
+				g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+				
+				g2.setColor(Color.white);
+
+				g2.setStroke(new BasicStroke(4));
+				g2.drawRoundRect(gp.screenWidth / 2 - 200, gp.screenHeight / 2 - 250, 400, 500, 50, 50);
+
+
+				// REGISTER
+				g2.setFont(maruMonica.deriveFont(Font.BOLD, 50F)); // keep this line before the line that calls
+																	// getXforCenteredText() method
+				String text = "Login";
+				int x = getXforCenteredText("Register");
+				int y = gp.tileSize * 2;
+				g2.drawString(text, x, y);
+
+				g2.setFont(maruMonica.deriveFont(Font.BOLD, 37F));
+				// USERNAME
+
+				g2.setColor(Color.GRAY);
+				if (commandNum == 0) {
+					g2.setColor(Color.WHITE);
+				}
+				text = "Username";
+				x = 308;
+				y += gp.tileSize + 30;
+				g2.setStroke(new BasicStroke(3));
+				g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
+				g2.drawString(text, x + 10, y);
+
+				// PASSWORD
+				g2.setColor(Color.GRAY);
+				if (commandNum == 1) {
+					g2.setColor(Color.WHITE);
+				}
+				text = "Password";
+				y += gp.tileSize + 24;
+				g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
+				g2.drawString(text, x + 10, y);
+
+				// Login btn
+				g2.setColor(Color.WHITE);
+				text = "Login";
+				x = getXforCenteredText(text);
+				y += gp.tileSize + 24;
+				if (commandNum == 2) {
+					g2.drawString(">", x - 10, y);
+					if(gp.keyH.enterPressed) {
+						System.out.println("Login done (testing)");
+					}
+				}
+				g2.drawString(text, x + 10, y);
+
+				// back
+				text = "Back";
+				y += gp.tileSize;
+				
+				g2.drawString("Register Instead", x + 10, y);
+				if (commandNum == 3) {
+					g2.drawString(">", x - 10, y);
+					if(gp.keyH.enterPressed) {
+						System.out.println("Register page (test)");
+						gp.gameState = gp.signupState;
+						commandNum = 0;
+						
+					}
+				}
+				
+				// reset
+				gp.keyH.enterPressed = false;
+	}
 	public void drawSignupScreen() {
 		// i have mentioned why this is here somewhere in the code and i am not doing it again
 		g2.setColor(new Color(0, 0, 0));
@@ -246,6 +326,8 @@ public class UI {
 			g2.drawString(">", x - 10, y);
 			if(gp.keyH.enterPressed) {
 				System.out.println("Back done (test)");
+				gp.gameState = gp.loginState;
+				commandNum = 0;
 			}
 		}
 		g2.drawString("Back", x + 10, y);

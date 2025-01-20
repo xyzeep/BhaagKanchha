@@ -266,7 +266,24 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 			}
 
 		}
+		
+		if (gp.gameState == gp.loginState) {
+			maxCommandNum = 3;
 
+			if (code == KeyEvent.VK_TAB) {
+				gp.playSoundEffect(5);
+				gp.ui.commandNum++;
+				if (gp.ui.commandNum > maxCommandNum) {
+					gp.ui.commandNum = 0;
+				}
+			}
+			
+			if (code == KeyEvent.VK_ENTER) {
+				enterPressed = true;
+			}
+
+		}
+		
 		if (gp.gameState == gp.gameFinishedState) {
 			maxCommandNum = 1;
 			if (code == KeyEvent.VK_W) {
