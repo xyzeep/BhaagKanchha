@@ -73,7 +73,9 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public UI ui = new UI(this);
 
 	public EventHandler eHandler = new EventHandler(this);
-
+	
+	public Database db = new Database();
+	
 	public Config config = new Config(this);
 
 	// The most important thing in a 2D/3D game is the existence of time.
@@ -112,9 +114,10 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		config.loadConfig();
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
 		aSetter.setNPC();
+		db.connect();
 //		playMusic(0); // don't want music in titleScreen
-		gameState = loginState;
-
+		gameState = signupState;
+		
 		// full screen
 		tempScreen = new BufferedImage(screenWidth2, screenHeight2, BufferedImage.TYPE_INT_ARGB_PRE);
 		g2 = (Graphics2D) tempScreen.getGraphics();

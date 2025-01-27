@@ -264,6 +264,22 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 			if (code == KeyEvent.VK_ENTER) {
 				enterPressed = true;
 			}
+			
+			 char keyChar = e.getKeyChar(); // 'e' is your KeyEvent object
+			    if (Character.isLetterOrDigit(keyChar)) {
+			        System.out.println("The key pressed is alphanumeric.");
+			        gp.ui.username += keyChar; // append key char
+			        
+			    } else if (code == KeyEvent.VK_BACK_SPACE) { // if pressed backspace
+			        System.out.println("del pressed");
+			        if (gp.ui.username.length() > 0) {
+			            // Remove the last character from the username
+			            gp.ui.username = gp.ui.username.substring(0, gp.ui.username.length() - 1);
+			        } else {
+			        	 gp.ui.username = "Username"; 
+			        }
+			 
+			    }
 
 		}
 		
@@ -314,6 +330,8 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 			}
 
 		}
+		
+
 
 	}
 

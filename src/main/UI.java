@@ -204,7 +204,7 @@ public class UI {
 				if (commandNum == 0) {
 					g2.setColor(Color.WHITE);
 				}
-				text = "Username";
+				text = username;
 				x = 308;
 				y += gp.tileSize + 30;
 				g2.setStroke(new BasicStroke(3));
@@ -278,7 +278,7 @@ public class UI {
 		if (commandNum == 0) {
 			g2.setColor(Color.WHITE);
 		}
-		text = "Username";
+		text = username;
 		x = 308;
 		y += gp.tileSize + 30;
 		g2.setStroke(new BasicStroke(3));
