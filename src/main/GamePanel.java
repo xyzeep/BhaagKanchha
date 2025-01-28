@@ -74,7 +74,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 
 	public EventHandler eHandler = new EventHandler(this);
 	
-	public Database db = new Database();
+	public Database db = new Database(this);
 	
 	public Config config = new Config(this);
 
@@ -114,7 +114,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		config.loadConfig();
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
 		aSetter.setNPC();
-		db.connect();
+		db.connectToDatabase();
 //		playMusic(0); // don't want music in titleScreen
 		gameState = signupState;
 		

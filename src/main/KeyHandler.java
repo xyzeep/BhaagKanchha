@@ -251,7 +251,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 		}
 
 		if (gp.gameState == gp.signupState) {
-			maxCommandNum = 4;
+			maxCommandNum = 5;
 
 			if (code == KeyEvent.VK_TAB) {
 				gp.playSoundEffect(5);
@@ -260,29 +260,96 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					gp.ui.commandNum = 0;
 				}
 			}
-			
+
 			if (code == KeyEvent.VK_ENTER) {
 				enterPressed = true;
 			}
+
+			// HANDLING KEY INPUTSSSS
+			char keyChar = e.getKeyChar(); // 'e' is your KeyEvent object
 			
-			 char keyChar = e.getKeyChar(); // 'e' is your KeyEvent object
-			    if (Character.isLetterOrDigit(keyChar)) {
-			        System.out.println("The key pressed is alphanumeric.");
-			        gp.ui.username += keyChar; // append key char
-			        
-			    } else if (code == KeyEvent.VK_BACK_SPACE) { // if pressed backspace
-			        System.out.println("del pressed");
-			        if (gp.ui.username.length() > 0) {
-			            // Remove the last character from the username
-			            gp.ui.username = gp.ui.username.substring(0, gp.ui.username.length() - 1);
-			        } else {
-			        	 gp.ui.username = "Username"; 
-			        }
-			 
-			    }
+			if (gp.ui.commandNum == 0) {
+				if (Character.isLetterOrDigit(keyChar) || keyChar == '!' || keyChar == '@' || keyChar == '#'
+						|| keyChar == '$' || keyChar == '%') {
+					if(gp.ui.username == "placeholderUsername") {
+						gp.ui.username = "";
+					}
+					gp.ui.username += keyChar; // append key char
+
+				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.username != "placeholderUsername") { // if pressed backspace
+					System.out.println("del pressed");
+					if (gp.ui.username.length() > 1) {
+						// Remove the last character from the username
+						gp.ui.username = gp.ui.username.substring(0, gp.ui.username.length() - 1);
+					} else {
+						gp.ui.username = "placeholderUsername";
+					}
+
+				}
+			}
+			
+			if (gp.ui.commandNum == 1) {
+				if (Character.isLetterOrDigit(keyChar) || keyChar == '!' || keyChar == '@' || keyChar == '#'
+						|| keyChar == '$' || keyChar == '%') {
+					if(gp.ui.password == "placeholderPassword") {
+						gp.ui.password = "";
+					}
+					gp.ui.password += keyChar; // append key char
+
+				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.password != "placeholderPassword") { // if pressed backspace
+					System.out.println("del pressed");
+					if (gp.ui.password.length() > 1) {
+						// Remove the last character from the username
+						gp.ui.password = gp.ui.password.substring(0, gp.ui.password.length() - 1);
+					} else {
+						gp.ui.password = "placeholderPassword";
+					}
+
+				}
+			}
+			
+			if (gp.ui.commandNum == 2) {
+				if (Character.isLetterOrDigit(keyChar) || keyChar == '!' || keyChar == '@' || keyChar == '#'
+						|| keyChar == '$' || keyChar == '%') {
+					if(gp.ui.passwordAgain == "placeholderPasswordAgain") {
+						gp.ui.passwordAgain = "";
+					}
+					gp.ui.passwordAgain += keyChar; // append key char
+
+				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.passwordAgain != "placeholderPasswordAgain") { // if pressed backspace
+					System.out.println("del pressed");
+					if (gp.ui.passwordAgain.length() > 1) {
+						// Remove the last character from the username
+						gp.ui.passwordAgain = gp.ui.passwordAgain.substring(0, gp.ui.passwordAgain.length() - 1);
+					} else {
+						gp.ui.passwordAgain = "placeholderPasswordAgain";
+					}
+
+				}
+			}
+			
+			if (gp.ui.commandNum == 3) {
+				if (Character.isDigit(keyChar)) {
+					if(gp.ui.security == "placeholderSecurity") {
+						gp.ui.security = "";
+					}
+					gp.ui.security += keyChar; // append key char
+
+				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.security != "placeholderSecurity") { // if pressed backspace
+					System.out.println("del pressed");
+					if (gp.ui.security.length() > 1) {
+						// Remove the last character from the username
+						gp.ui.security = gp.ui.security.substring(0, gp.ui.security.length() - 1);
+					} else {
+						gp.ui.security = "placeholderSecurity";
+					}
+
+				}
+			}
+			
 
 		}
-		
+
 		if (gp.gameState == gp.loginState) {
 			maxCommandNum = 3;
 
@@ -293,13 +360,13 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					gp.ui.commandNum = 0;
 				}
 			}
-			
+
 			if (code == KeyEvent.VK_ENTER) {
 				enterPressed = true;
 			}
 
 		}
-		
+
 		if (gp.gameState == gp.gameFinishedState) {
 			maxCommandNum = 1;
 			if (code == KeyEvent.VK_W) {
@@ -330,8 +397,6 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 			}
 
 		}
-		
-
 
 	}
 
