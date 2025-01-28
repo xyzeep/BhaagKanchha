@@ -249,7 +249,78 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 			}
 
 		}
+		// LOGIN STATE KEY HANLDING
+		if (gp.gameState == gp.loginState) {
+			maxCommandNum = 3;
 
+			if (code == KeyEvent.VK_TAB) {
+				gp.playSoundEffect(5);
+				gp.ui.commandNum++;
+				if (gp.ui.commandNum > maxCommandNum) {
+					gp.ui.commandNum = 0;
+				}
+			}
+
+			if (code == KeyEvent.VK_ENTER) {
+				enterPressed = true;
+			}
+
+			// HANDLING KEY INPUTSSSS
+			char keyChar = e.getKeyChar(); // 'e' is your KeyEvent object
+			
+			if (gp.ui.commandNum == 0) {
+				if (Character.isLetterOrDigit(keyChar) || keyChar == '!' || keyChar == '@' || keyChar == '#'
+						|| keyChar == '$' || keyChar == '%') {
+					if(gp.ui.username == "placeholderUsername") {
+						gp.ui.username = "";
+					}
+					gp.ui.username += keyChar; // append key char
+
+				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.username != "placeholderUsername") { // if pressed backspace
+					System.out.println("del pressed");
+					if (gp.ui.username.length() > 1) {
+						// Remove the last character from the username
+						gp.ui.username = gp.ui.username.substring(0, gp.ui.username.length() - 1);
+					} else {
+						gp.ui.username = "placeholderUsername";
+					}
+
+				}
+			}
+			
+			if (gp.ui.commandNum == 1) {
+				if (Character.isLetterOrDigit(keyChar) || keyChar == '!' || keyChar == '@' || keyChar == '#'
+						|| keyChar == '$' || keyChar == '%') {
+					if(gp.ui.password == "placeholderPassword") {
+						gp.ui.password = "";
+					}
+					gp.ui.password += keyChar; // append key char
+
+				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.password != "placeholderPassword") { // if pressed backspace
+					System.out.println("del pressed");
+					if (gp.ui.password.length() > 1) {
+						// Remove the last character from the username
+						gp.ui.password = gp.ui.password.substring(0, gp.ui.password.length() - 1);
+					} else {
+						gp.ui.password = "placeholderPassword";
+					}
+
+				}
+			}
+			
+			if (gp.ui.commandNum == 2) {
+				//
+			}
+			
+			if (gp.ui.commandNum == 3) {
+			//
+			}
+			
+
+		}
+		
+		
+		// SIGNUP STATE KEY HANDLING
 		if (gp.gameState == gp.signupState) {
 			maxCommandNum = 5;
 
@@ -350,22 +421,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 
 		}
 
-		if (gp.gameState == gp.loginState) {
-			maxCommandNum = 3;
 
-			if (code == KeyEvent.VK_TAB) {
-				gp.playSoundEffect(5);
-				gp.ui.commandNum++;
-				if (gp.ui.commandNum > maxCommandNum) {
-					gp.ui.commandNum = 0;
-				}
-			}
-
-			if (code == KeyEvent.VK_ENTER) {
-				enterPressed = true;
-			}
-
-		}
 
 		if (gp.gameState == gp.gameFinishedState) {
 			maxCommandNum = 1;

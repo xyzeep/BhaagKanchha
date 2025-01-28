@@ -104,10 +104,10 @@ public class Database {
 
 			int rowsAffected = pStatement.executeUpdate();
 			if (rowsAffected > 0) {
-				System.out.println("Sign up successful!");
+				gp.gameState = gp.loginState;
+				gp.ui.resetInputFields();
 			} else {
-				gp.ui.errorMessage = "not a valid signup";
-				System.out.println("Sign up failed.");
+				gp.ui.errorMessage = "Invalid Signup";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

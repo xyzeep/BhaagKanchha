@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 
+import javax.imageio.ImageIO;
+
 import entity.Player;
 import object.SuperObject;
 import object.OBJ_Heart;
@@ -22,7 +24,11 @@ public class UI {
 	String passwordAgain = "placeholderPasswordAgain";
 	String security = "placeholderSecurity";
 	String errorMessage = null;
+	public BufferedImage right1, right2, torch1, torch2, kanchhaImage, yellowGlow, torchImage, image;
+	int kanchhaImageY;
+	
 	int errorMsgCounter = 0;
+	int uiImageCounter = 0;
 	boolean showPassword = false;
 
 	Player player;
@@ -68,6 +74,24 @@ public class UI {
 		fullHeart = heart.image;
 		halfHeart = heart.image2;
 		emptyHeart = heart.image3;
+		try {
+			image = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_1.png"));
+			right1 = UtilityTool.resizeImage(image, 80, 80);
+			image = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_2.png"));
+			right2 = UtilityTool.resizeImage(image, 80, 80);
+			image = ImageIO.read(getClass().getResourceAsStream("/object/torch1.png"));
+			torch1 = UtilityTool.resizeImage(image, 200, 200);
+			image = ImageIO.read(getClass().getResourceAsStream("/object/torch2.png"));
+			torch2 = UtilityTool.resizeImage(image, 200, 200);
+			image = ImageIO.read(getClass().getResourceAsStream("/object/yellowGlow.png"));
+			yellowGlow = UtilityTool.resizeImage(image, 200, 200);
+			kanchhaImage = right1;
+			torchImage = torch1;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		kanchhaImage = right1;
 	}
 
 	public void draw(Graphics2D g2) {
@@ -186,65 +210,85 @@ public class UI {
 		g2.setColor(new Color(0, 0, 0));
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
+		drawUIImages();
+
 		g2.setColor(Color.white);
 
 		g2.setStroke(new BasicStroke(4));
 		g2.drawRoundRect(gp.screenWidth / 2 - 200, gp.screenHeight / 2 - 250, 400, 500, 50, 50);
 
-		// REGISTER
+		// LOGIN
 		g2.setFont(maruMonica.deriveFont(Font.BOLD, 50F)); // keep this line before the line that calls
 															// getXforCenteredText() method
 		String text = "Login";
-		int x = getXforCenteredText("Register");
+		int x = getXforCenteredText(text);
 		int y = gp.tileSize * 2;
+		
 		g2.drawString(text, x, y);
 
 		g2.setFont(maruMonica.deriveFont(Font.BOLD, 37F));
 		// USERNAME
 
 		g2.setColor(Color.GRAY);
+		y += gp.tileSize + 30;
 		if (commandNum == 0) {
 			g2.setColor(Color.WHITE);
+			kanchhaImageY = y;
 		}
-		text = username;
+		text = (username == "placeholderUsername") ? "Username" : username;
 		x = 308;
-		y += gp.tileSize + 30;
 		g2.setStroke(new BasicStroke(3));
 		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
 		g2.drawString(text, x + 10, y);
 
 		// PASSWORD
 		g2.setColor(Color.GRAY);
+		y += gp.tileSize + 24;
 		if (commandNum == 1) {
 			g2.setColor(Color.WHITE);
+			kanchhaImageY = y;
 		}
-		text = "Password";
-		y += gp.tileSize + 24;
+		text = (password == "placeholderPassword") ? "Password" : password;
+		/// HIDE PASSWORD
+
+		if (password == "placeholderPassword") {
+			text = "Password";
+		} else {
+			text = "";
+			for (int i = 0; i < password.length(); i++) {
+				text += "*";
+			}
+		}
 		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
-		g2.drawString(text, x + 10, y);
+		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
+		if (password == "placeholderPassword") {
+			g2.setColor(Color.GRAY);
+			g2.drawString(text, x + 10, y);
+		} else {
+			g2.drawString(text, x + 10, y);
+		}
 
 		// Login btn
 		g2.setColor(Color.WHITE);
 		text = "Login";
-		x = getXforCenteredText(text);
-		y += gp.tileSize + 24;
+		x = getXforCenteredText(text) - 10;
+		y += gp.tileSize * 4 + 24;
 		if (commandNum == 2) {
-			g2.drawString(">", x - 10, y);
+			g2.drawString(">", x - 20, y);
 			if (gp.keyH.enterPressed) {
 				System.out.println("Login done (testing)");
 			}
 		}
-		g2.drawString(text, x + 10, y);
+		g2.drawString(text, x, y);
 
 		// back
-		text = "Back";
+		text = "Register";
 		y += gp.tileSize;
-
-		g2.drawString("Register Instead", x + 10, y);
+		g2.drawString(text, x, y);
 		if (commandNum == 3) {
-			g2.drawString(">", x - 10, y);
+			g2.drawString(">", x - 20, y);
 			if (gp.keyH.enterPressed) {
-				System.out.println("Register page (test)");
+				resetInputFields();
 				gp.gameState = gp.signupState;
 				commandNum = 0;
 
@@ -256,30 +300,24 @@ public class UI {
 	}
 
 	public void drawSignupScreen() {
-		
-		
-		
 		// i have mentioned why this is here somewhere in the code and i am not doing it
 		// again
 		g2.setColor(new Color(0, 0, 0));
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
-		
-		
 
+		drawUIImages();
 		// if errors, display
 		if (errorMessage != null && errorMsgCounter < 120) {
-			errorMsgCounter ++;
+			errorMsgCounter++;
 			g2.setColor(Color.RED);
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
 			g2.drawString(errorMessage, 200, 200);
-			if (errorMsgCounter >= 120 ) {
+			if (errorMsgCounter >= 120) {
 				errorMsgCounter = 0;
 				errorMessage = null;
 			}
 		}
-		
-		
-		
+
 		g2.setColor(Color.white);
 		g2.setFont(maruMonica.deriveFont(Font.BOLD, 50F));
 		g2.setStroke(new BasicStroke(4));
@@ -297,31 +335,33 @@ public class UI {
 		// USERNAME
 
 		g2.setColor(Color.GRAY);
+		y += gp.tileSize + 30;
 		if (commandNum == 0) {
 			g2.setColor(Color.WHITE);
+			kanchhaImageY = y;
 		}
 		text = (username == "placeholderUsername") ? "Username" : username;
 		x = 308;
-		y += gp.tileSize + 30;
-		
+
 		g2.setStroke(new BasicStroke(3));
 		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
 		if (username == "placeholderUsername") {
 			g2.setColor(Color.GRAY);
 			g2.drawString(text, x + 10, y);
-		}
-		else {
+		} else {
 			g2.drawString(text, x + 10, y);
 		}
 
 		// PASSWORD
 		g2.setColor(Color.GRAY);
+		y += gp.tileSize + 24;
 		if (commandNum == 1) {
 			g2.setColor(Color.WHITE);
+			kanchhaImageY = y;
 		}
 
 		/// HIDE PASSWORD
-		
+
 		if (password == "placeholderPassword") {
 			text = "Password";
 		} else {
@@ -330,21 +370,20 @@ public class UI {
 				text += "*";
 			}
 		}
-		y += gp.tileSize + 24;
 		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
 		if (password == "placeholderPassword") {
 			g2.setColor(Color.GRAY);
 			g2.drawString(text, x + 10, y);
-		}
-		else {
+		} else {
 			g2.drawString(text, x + 10, y);
 		}
 
 		// PASSWORD(AGAIN)
 		g2.setColor(Color.GRAY);
+		y += gp.tileSize + 24;
 		if (commandNum == 2) {
 			g2.setColor(Color.WHITE);
-
+			kanchhaImageY = y;
 		}
 		// HIDE PASSWORD RETYPE
 		if (passwordAgain == "placeholderPasswordAgain") {
@@ -355,30 +394,27 @@ public class UI {
 				text += "*";
 			}
 		}
-		y += gp.tileSize + 24;
 		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
 		if (passwordAgain == "placeholderPasswordAgain") {
 			g2.setColor(Color.GRAY);
 			g2.drawString(text, x + 10, y);
-		}
-		else {
+		} else {
 			g2.drawString(text, x + 10, y);
 		}
-		
+
 		// security
+		y += gp.tileSize + 24;
 		g2.setColor(Color.GRAY);
 		if (commandNum == 3) {
 			g2.setColor(Color.WHITE);
-
+			kanchhaImageY = y;
 		}
 		text = (security == "placeholderSecurity") ? "Your mom's number" : security;
-		y += gp.tileSize + 24;
 		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
 		if (security == "placeholderSecurity") {
 			g2.setColor(Color.GRAY);
 			g2.drawString(text, x + 10, y);
-		}
-		else {
+		} else {
 			g2.drawString(text, x + 10, y);
 		}
 
@@ -394,7 +430,6 @@ public class UI {
 				gp.db.signUP(); // hmm signup func in Database.java
 			}
 		}
-	
 
 		// back
 		g2.setColor(Color.WHITE);
@@ -403,7 +438,7 @@ public class UI {
 		if (commandNum == 5) {
 			g2.drawString(">", x - 10, y);
 			if (gp.keyH.enterPressed) {
-				System.out.println("Back done (test)");
+				resetInputFields();
 				gp.gameState = gp.loginState;
 				commandNum = 0;
 			}
@@ -890,6 +925,27 @@ public class UI {
 		g2.setStroke(new BasicStroke(5)); // 5 = width of outlines of graphics
 		g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25);
 
+	}
+
+	public void resetInputFields() {
+		this.username = "placeholderUsername";
+		this.password = "placeholderPassword";
+		this.passwordAgain = "placeholderPasswordAgain";
+		this.security = "placeholderSecurity";
+	}
+
+	public void drawUIImages() {
+
+		uiImageCounter++;
+		if (uiImageCounter > 50) {
+			kanchhaImage = (kanchhaImage == right1) ? right2 : right1;
+			torchImage = (torchImage == torch1) ? torch2 : torch1;
+			uiImageCounter = 0;
+		}
+		
+		g2.drawImage(kanchhaImage,gp.tileSize * 2, kanchhaImageY - 60, null);
+		g2.drawImage(yellowGlow, gp.tileSize * 15 - 5, 315, null);
+		g2.drawImage(torchImage, gp.tileSize * 15, 350, null);
 	}
 
 }
