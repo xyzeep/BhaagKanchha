@@ -209,15 +209,16 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					break;
 
 				case 2: // quit
+					gp.config.saveConfig(); // config is saved
 					System.exit(0); // exit with 0(successfully)
 					break;
 
 				case 3: // logout
-					// do later
-
+					gp.db.logout();
 				}
-
+			
 			}
+			gp.keyH.enterPressed = false;
 		}
 
 		if (gp.gameState == gp.gameOverState) {
@@ -274,7 +275,9 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					if(gp.ui.username == "placeholderUsername") {
 						gp.ui.username = "";
 					}
-					gp.ui.username += keyChar; // append key char
+					if (gp.ui.username != "placeholderUsername" && gp.ui.username.length() < 19) {
+						gp.ui.username += keyChar; // append key char
+					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.username != "placeholderUsername") { // if pressed backspace
 					System.out.println("del pressed");
@@ -294,7 +297,9 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					if(gp.ui.password == "placeholderPassword") {
 						gp.ui.password = "";
 					}
-					gp.ui.password += keyChar; // append key char
+					if (gp.ui.password != "placeholderPassword" && gp.ui.password.length() < 19) {
+						gp.ui.password += keyChar; // append key char
+					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.password != "placeholderPassword") { // if pressed backspace
 					System.out.println("del pressed");
@@ -345,7 +350,9 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					if(gp.ui.username == "placeholderUsername") {
 						gp.ui.username = "";
 					}
-					gp.ui.username += keyChar; // append key char
+					if (gp.ui.username != "placeholderUsername" && gp.ui.username.length() < 19) {
+						gp.ui.username += keyChar; // append key char
+					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.username != "placeholderUsername") { // if pressed backspace
 					System.out.println("del pressed");
@@ -365,7 +372,9 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					if(gp.ui.password == "placeholderPassword") {
 						gp.ui.password = "";
 					}
-					gp.ui.password += keyChar; // append key char
+					if (gp.ui.password != "placeholderUsername" && gp.ui.password.length() < 19) {
+						gp.ui.password += keyChar; // append key char
+					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.password != "placeholderPassword") { // if pressed backspace
 					System.out.println("del pressed");
@@ -385,7 +394,9 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					if(gp.ui.passwordAgain == "placeholderPasswordAgain") {
 						gp.ui.passwordAgain = "";
 					}
-					gp.ui.passwordAgain += keyChar; // append key char
+					if (gp.ui.passwordAgain != "placeholderPassword" && gp.ui.passwordAgain.length() < 19) {
+						gp.ui.passwordAgain += keyChar; // append key char
+					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.passwordAgain != "placeholderPasswordAgain") { // if pressed backspace
 					System.out.println("del pressed");
@@ -404,7 +415,9 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					if(gp.ui.security == "placeholderSecurity") {
 						gp.ui.security = "";
 					}
-					gp.ui.security += keyChar; // append key char
+					if (gp.ui.security != "placeholderSecurity" && gp.ui.security.length() < 19) {
+						gp.ui.security += keyChar; // append key char
+					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.security != "placeholderSecurity") { // if pressed backspace
 					System.out.println("del pressed");

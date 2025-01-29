@@ -52,20 +52,20 @@ public class Database {
 			gp.ui.errorMessage = "Username can only have letters and numbers.";
 			return;
 		}
-		
+
 		// password not matching retyped password
-		if(!gp.ui.password.equals(gp.ui.passwordAgain) ) {
+		if (!gp.ui.password.equals(gp.ui.passwordAgain)) {
 			gp.ui.errorMessage = "Passwords didn't match.";
 			return;
 		}
-		
+
 		// checking username length
-		if(gp.ui.username.length() > 19) {
+		if (gp.ui.username.length() > 19) {
 			gp.ui.errorMessage = "Username should not contain more than 19 characters.";
 			return;
 		}
 		// checking password length
-		if(gp.ui.password.length() < 8) {
+		if (gp.ui.password.length() < 8) {
 			gp.ui.errorMessage = "Password should contain at least 8 characters.";
 			return;
 		} else if (gp.ui.password.length() > 19) {
@@ -122,5 +122,112 @@ public class Database {
 		}
 
 	}
+
+	public void login() {
+		// CHECKING POSSIBLE ERRORS
+
+		// missing inputs error
+		if (gp.ui.username == "placeholderUsername" || gp.ui.password == "placeholderPassword") {
+			gp.ui.errorMessage = "Please fill all input fields.";
+			return;
+		}
+
+		Connection connection = connectToDatabase(); // connect to db
+
+		// check if user exists
+		String query = "SELECT COUNT(*) FROM Players WHERE username = ?";
+		try (PreparedStatement checkIfExists = connection.prepareStatement(query)) {
+			checkIfExists.setString(1, gp.ui.username);
+			ResultSet resultSet = checkIfExists.executeQuery();
+
+			resultSet = checkIfExists.executeQuery();
+
+			// is exists
+			if (resultSet.getInt(1) > 0) {
+				System.out.println("user exists");
+			} else {
+				gp.ui.errorMessage = "User " + gp.ui.username + " doesn't exist.";
+				connection.close();
+				return;
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Something unexpected happened while checking if user exists: " + e.getMessage());
+			e.printStackTrace();
+			return;
+		}
+
+		// check if password matches
+		query = "SELECT password FROM Players WHERE username = ?";
+		try (PreparedStatement passwordMatch = connection.prepareStatement(query)) {
+			passwordMatch.setString(1, gp.ui.username);
+			ResultSet resultSet = passwordMatch.executeQuery();
+
+			resultSet = passwordMatch.executeQuery();
+
+			// is password matches
+			if (resultSet.getString(1).equals(gp.ui.password)) {
+				System.out.println("password matched");
+				gp.ui.resetInputFields();
+				gp.currentUserID = "1";
+				gp.gameState = gp.titleState;
+				gp.config.saveConfig(); // config is saved
+				gp.config.loadConfig();
+
+			} else {
+				gp.ui.errorMessage = "Incorrect password. Please try again.";
+				connection.close();
+				return;
+			}
+
+		} catch (SQLException e) {
+			System.err
+					.println("Something unexpected happened while checking if the password matches: " + e.getMessage());
+			e.printStackTrace();
+			return;
+		} finally {
+			try {
+				if (connection != null && !connection.isClosed()) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (connection != null && !connection.isClosed()) {
+						connection.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public void logout() {
+		gp.gameState = gp.loginState;
+		gp.currentUserID = null;
+		gp.config.saveConfig(); // config is saved
+	}
+
+	public String getUsername() {
+		Connection connection = connectToDatabase();
+		String query = "SELECT username FROM Players WHERE playerID = ?";
+		try (PreparedStatement gettingUsername = connection.prepareStatement(query)) {
+			gettingUsername.setString(1, gp.currentUserID);
+			ResultSet resultSet = gettingUsername.executeQuery();
+
+			resultSet = gettingUsername.executeQuery();
+
+			
+			return resultSet.getString(1); // returns username
+		} catch (SQLException e) {
+			System.err
+					.println("Something unexpected happened while checking if the password matches: " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 
 }

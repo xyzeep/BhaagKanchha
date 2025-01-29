@@ -18,6 +18,13 @@ public class Config {
 
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter("config.txt"));
+			// current logged in user
+			if (gp.currentUserID != null) {
+				bw.write("currentUserID: " + gp.currentUserID);
+			} else{
+				bw.write("currentUserID: null");
+			}
+			bw.newLine();
 
 			// full screen setting
 			if (gp.fullScreenOn) {
@@ -49,7 +56,14 @@ public class Config {
 
 			String s = br.readLine();
 
+			// current user
+			String userID = s.split(":")[1].trim(); // only get ID
+			if (!userID.equals("null")) {
+				gp.currentUserID = userID;
+			}
+
 			// full screen
+			s = br.readLine();
 			if (s.equals("FullScreen: On")) {
 				gp.fullScreenOn = true;
 			}

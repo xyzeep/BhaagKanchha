@@ -20,8 +20,12 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 															// as a game screen
 	// our class has to implement runnable for us to be able to use a Thread. It has
 	// a single method, run(), where we write the code for the task.
-
+	
 	private static final long serialVersionUID = 1L; // to avoid a werid warning (static final serialVersionUID)
+	
+	public String currentUserID;
+	public String currentUsername;
+	
 	public int currentFPS;
 	// Screen settigns
 	final int originalTileSize = 16; // 16 x 16 tiles
@@ -115,8 +119,14 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 		aSetter.setObject(); // we call this setupGame() method before the game starts(in Main.java)
 		aSetter.setNPC();
 		db.connectToDatabase();
+		currentUsername = db.getUsername();
 //		playMusic(0); // don't want music in titleScreen
-		gameState = signupState;
+		if (currentUserID != null) {
+			gameState = titleState;
+		}
+		else {
+			gameState = loginState;
+		}
 		
 		// full screen
 		tempScreen = new BufferedImage(screenWidth2, screenHeight2, BufferedImage.TYPE_INT_ARGB_PRE);
@@ -221,12 +231,14 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 			ui.draw(g2);
 
 		}
-		// TITLE SCREEN
+		// Signup SCREEN
 		if (gameState == signupState) {
 			ui.draw(g2);
-
 		}
-
+		
+		if (gameState == loginState) {
+			ui.draw(g2);
+		}
 		// others
 		else {
 			// TILES

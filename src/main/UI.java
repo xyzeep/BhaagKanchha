@@ -26,7 +26,7 @@ public class UI {
 	String errorMessage = null;
 	public BufferedImage right1, right2, torch1, torch2, kanchhaImage, yellowGlow, torchImage, image;
 	int kanchhaImageY;
-	
+
 	int errorMsgCounter = 0;
 	int uiImageCounter = 0;
 	boolean showPassword = false;
@@ -87,7 +87,7 @@ public class UI {
 			yellowGlow = UtilityTool.resizeImage(image, 200, 200);
 			kanchhaImage = right1;
 			torchImage = torch1;
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -211,6 +211,17 @@ public class UI {
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
 		drawUIImages();
+		// if errors, display
+		if (errorMessage != null && errorMsgCounter < 120) {
+			errorMsgCounter++;
+			g2.setColor(Color.RED);
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
+			g2.drawString(errorMessage, 200, 200);
+			if (errorMsgCounter >= 120) {
+				errorMsgCounter = 0;
+				errorMessage = null;
+			}
+		}
 
 		g2.setColor(Color.white);
 
@@ -223,7 +234,7 @@ public class UI {
 		String text = "Login";
 		int x = getXforCenteredText(text);
 		int y = gp.tileSize * 2;
-		
+
 		g2.drawString(text, x, y);
 
 		g2.setFont(maruMonica.deriveFont(Font.BOLD, 37F));
@@ -239,7 +250,12 @@ public class UI {
 		x = 308;
 		g2.setStroke(new BasicStroke(3));
 		g2.drawRoundRect(x, y - 40, 340, 50, 8, 8);
-		g2.drawString(text, x + 10, y);
+		if (username == "placeholderUsername") {
+			g2.setColor(Color.GRAY);
+			g2.drawString(text, x + 10, y);
+		} else {
+			g2.drawString(text, x + 10, y);
+		}
 
 		// PASSWORD
 		g2.setColor(Color.GRAY);
@@ -276,7 +292,8 @@ public class UI {
 		if (commandNum == 2) {
 			g2.drawString(">", x - 20, y);
 			if (gp.keyH.enterPressed) {
-				System.out.println("Login done (testing)");
+				gp.db.login();
+				
 			}
 		}
 		g2.drawString(text, x, y);
@@ -294,7 +311,7 @@ public class UI {
 
 			}
 		}
-
+		System.out.println("LOGIN MA ");
 		// reset
 		gp.keyH.enterPressed = false;
 	}
@@ -427,6 +444,7 @@ public class UI {
 		if (commandNum == 4) {
 			g2.drawString(">", x - 10, y);
 			if (gp.keyH.enterPressed) {
+				commandNum = 0;
 				gp.db.signUP(); // hmm signup func in Database.java
 			}
 		}
@@ -444,7 +462,7 @@ public class UI {
 			}
 		}
 		g2.drawString("Back", x + 10, y);
-
+		drawGameVersion(); // game version
 		// reset
 		gp.keyH.enterPressed = false;
 	}
@@ -623,6 +641,9 @@ public class UI {
 		// KANCHHA CHARACTER IMAGE
 		x = 20;
 		y += gp.tileSize * 7 + 10;
+
+		drawGameVersion(); // game version
+		drawUserInfo();
 
 	}
 
@@ -942,10 +963,23 @@ public class UI {
 			torchImage = (torchImage == torch1) ? torch2 : torch1;
 			uiImageCounter = 0;
 		}
-		
-		g2.drawImage(kanchhaImage,gp.tileSize * 2, kanchhaImageY - 60, null);
+
+		g2.drawImage(kanchhaImage, gp.tileSize * 2, kanchhaImageY - 60, null);
 		g2.drawImage(yellowGlow, gp.tileSize * 15 - 5, 315, null);
 		g2.drawImage(torchImage, gp.tileSize * 15, 350, null);
+		
+		
 	}
 
+	public void drawGameVersion() {
+		g2.setFont(maruMonica.deriveFont(Font.BOLD, 28F));
+		g2.setColor(Color.white);
+		g2.drawString("Version 1.1.0", gp.tileSize * 17 - 10, gp.tileSize * 12 - 10);
+	}
+	
+	public void drawUserInfo() {
+		g2.setFont(maruMonica.deriveFont(Font.BOLD, 28F));
+		g2.setColor(Color.white);
+		g2.drawString("Logged in as " + gp.currentUsername, 20, gp.tileSize * 12 - 10);
+	}
 }

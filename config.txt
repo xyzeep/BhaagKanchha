@@ -1,3 +1,4 @@
+currentUserID: null
 FullScreen: Off
-Music: 0
-Sound: 3	
+Music: 3
+Sound: 4
