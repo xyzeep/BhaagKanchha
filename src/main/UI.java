@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -36,7 +37,7 @@ public class UI {
 
 	Graphics2D g2;
 
-	Font maruMonica, qaaxee, temp;
+	Font maruMonica, qaaxee, temp, miscFont;
 
 	BufferedImage fullHeart, halfHeart, emptyHeart;
 	public boolean messageOn = false;
@@ -61,7 +62,7 @@ public class UI {
 			qaaxee = Font.createFont(Font.TRUETYPE_FONT, is);
 			is = getClass().getResourceAsStream("/font/temp.ttf");
 			temp = Font.createFont(Font.TRUETYPE_FONT, is);
-
+			miscFont = new Font("Calibri", Font.BOLD, 18);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -212,16 +213,7 @@ public class UI {
 
 		drawUIImages();
 		// if errors, display
-		if (errorMessage != null && errorMsgCounter < 120) {
-			errorMsgCounter++;
-			g2.setColor(Color.RED);
-			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
-			g2.drawString(errorMessage, 200, 200);
-			if (errorMsgCounter >= 120) {
-				errorMsgCounter = 0;
-				errorMessage = null;
-			}
-		}
+		// If errors, display inside a speech bubble
 
 		g2.setColor(Color.white);
 
@@ -288,17 +280,17 @@ public class UI {
 		g2.setColor(Color.WHITE);
 		text = "Login";
 		x = getXforCenteredText(text) - 10;
-		y += gp.tileSize * 4 + 24;
+		y += gp.tileSize * 3 + 24;
 		if (commandNum == 2) {
 			g2.drawString(">", x - 20, y);
 			if (gp.keyH.enterPressed) {
 				gp.db.login();
-				
+
 			}
 		}
 		g2.drawString(text, x, y);
 
-		// back
+		// Regster btn
 		text = "Register";
 		y += gp.tileSize;
 		g2.drawString(text, x, y);
@@ -311,9 +303,26 @@ public class UI {
 
 			}
 		}
-		System.out.println("LOGIN MA ");
+
+		// Regster btn
+		text = "Quit";
+		y += gp.tileSize;
+		g2.drawString(text, x, y);
+		if (commandNum == 4) {
+			g2.drawString(">", x - 20, y);
+			if (gp.keyH.enterPressed) {
+				System.exit(0);
+
+			}
+		}
+		drawGameVersion();
+		if (errorMessage != null && errorMsgCounter < 120) {
+			drawErrorSpeechBubble();
+		}
 		// reset
 		gp.keyH.enterPressed = false;
+
+		System.out.println("In login");
 	}
 
 	public void drawSignupScreen() {
@@ -323,17 +332,6 @@ public class UI {
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
 		drawUIImages();
-		// if errors, display
-		if (errorMessage != null && errorMsgCounter < 120) {
-			errorMsgCounter++;
-			g2.setColor(Color.RED);
-			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
-			g2.drawString(errorMessage, 200, 200);
-			if (errorMsgCounter >= 120) {
-				errorMsgCounter = 0;
-				errorMessage = null;
-			}
-		}
 
 		g2.setColor(Color.white);
 		g2.setFont(maruMonica.deriveFont(Font.BOLD, 50F));
@@ -444,7 +442,6 @@ public class UI {
 		if (commandNum == 4) {
 			g2.drawString(">", x - 10, y);
 			if (gp.keyH.enterPressed) {
-				commandNum = 0;
 				gp.db.signUP(); // hmm signup func in Database.java
 			}
 		}
@@ -463,6 +460,10 @@ public class UI {
 		}
 		g2.drawString("Back", x + 10, y);
 		drawGameVersion(); // game version
+		// If errors, display inside a speech bubble
+		if (errorMessage != null && errorMsgCounter < 120) {
+			drawErrorSpeechBubble();
+		}
 		// reset
 		gp.keyH.enterPressed = false;
 	}
@@ -967,19 +968,67 @@ public class UI {
 		g2.drawImage(kanchhaImage, gp.tileSize * 2, kanchhaImageY - 60, null);
 		g2.drawImage(yellowGlow, gp.tileSize * 15 - 5, 315, null);
 		g2.drawImage(torchImage, gp.tileSize * 15, 350, null);
-		
-		
+
 	}
 
 	public void drawGameVersion() {
 		g2.setFont(maruMonica.deriveFont(Font.BOLD, 28F));
 		g2.setColor(Color.white);
-		g2.drawString("Version 1.1.0", gp.tileSize * 17 - 10, gp.tileSize * 12 - 10);
+		g2.drawString("Version 1.1.0", gp.tileSize * 17 - 10, 40);
+
+		g2.setFont(maruMonica.deriveFont(Font.BOLD, 30F));
+		if (gp.gameState == gp.loginState || gp.gameState == gp.signupState) {
+			g2.drawString("Use TAB to navigate.", 20, gp.tileSize * 11 + 30);
+		} else if (gp.gameState == gp.titleState) {
+			g2.drawString("Use W, S, and ENTER to navigate.", gp.tileSize * 12, gp.tileSize * 11 + 30);
+		}
 	}
-	
+
 	public void drawUserInfo() {
 		g2.setFont(maruMonica.deriveFont(Font.BOLD, 28F));
 		g2.setColor(Color.white);
-		g2.drawString("Logged in as " + gp.currentUsername, 20, gp.tileSize * 12 - 10);
+		g2.drawString("Username: " + gp.currentUsername, 20, gp.tileSize * 11 + 30);
+	}
+
+	public void drawErrorSpeechBubble() {
+		errorMsgCounter++;
+
+//		int textWidth = errorMessage.length() * 10;
+//		System.out.println("Width: " +  textWidth);
+//		System.out.println("Length: " +  errorMessage.length());
+
+		// dimensions
+//	    int padding = 5;
+		int x = 10;
+		int y = kanchhaImageY - 120; // Y-position
+		int width = 300;
+		int height = 60;
+		int tailSize = 20;
+
+		// speech bubble
+		g2.setColor(new Color(255, 220, 220));
+		g2.fillRoundRect(x, y, width, height, 20, 20);
+
+		// pointy stuff
+		int[] xPoints = { x + width / 2 - tailSize, x + width / 2 + tailSize, x + width / 2 };
+		int[] yPoints = { y + height, y + height, y + height + tailSize };
+		g2.fillPolygon(xPoints, yPoints, 3);
+
+		// bubble border
+		g2.setColor(new Color(180, 0, 0));
+		g2.setStroke(new BasicStroke(4));
+		g2.drawRoundRect(x, y, width, height, 20, 20);
+		g2.drawPolygon(xPoints, yPoints, 3);
+
+		// error message inside
+		g2.setColor(Color.BLACK);
+		g2.setFont(miscFont.deriveFont(Font.BOLD, 26F));
+		g2.drawString(errorMessage, x + 20, y + 35);
+
+		// reset after 3.333 secs
+		if (errorMsgCounter >= 120) {
+			errorMsgCounter = 0;
+			errorMessage = null;
+		}
 	}
 }

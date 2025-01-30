@@ -124,7 +124,7 @@ public class Entity {
 			g2.setStroke(new BasicStroke(3));
 			g2.setColor(Color.YELLOW);
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-			g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.width);
+		
 		}
 	}
 

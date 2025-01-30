@@ -155,6 +155,8 @@ public class Player extends Entity {
 
 		if (worldX >= 7580) {
 			gp.stopMusic();
+			gp.playSoundEffect(4);
+			gp.db.storeGameData(gp.currentUserID, 1, ((int) gp.timeToComplete / 10));
 			gp.gameState = gp.gameFinishedState;
 		}
 
@@ -249,14 +251,7 @@ public class Player extends Entity {
 
 		g2.drawImage(image, screenX, screenY, null); // this(null) is called an image
 														// observer, we can
-		// just type null here
-		// drawing image, at x and y positions, of size gp.tileSize(width) and
-		// gp.tileSize(height)
-		// ########################
-		g2.setStroke(new BasicStroke(3));
-		g2.setColor(Color.GREEN);
-		g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
-		g2.drawRect(screenX + gp.tileSize, screenY + solidArea.y, gp.tileSize, gp.tileSize);
+
 	}
 
 }

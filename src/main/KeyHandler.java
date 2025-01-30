@@ -214,6 +214,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					break;
 
 				case 3: // logout
+					gp.ui.commandNum = 0;
 					gp.db.logout();
 				}
 			
@@ -252,7 +253,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 		}
 		// LOGIN STATE KEY HANLDING
 		if (gp.gameState == gp.loginState) {
-			maxCommandNum = 3;
+			maxCommandNum = 4;
 
 			if (code == KeyEvent.VK_TAB) {
 				gp.playSoundEffect(5);
@@ -280,7 +281,9 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.username != "placeholderUsername") { // if pressed backspace
-					System.out.println("del pressed");
+				
+					
+					
 					if (gp.ui.username.length() > 1) {
 						// Remove the last character from the username
 						gp.ui.username = gp.ui.username.substring(0, gp.ui.username.length() - 1);
@@ -302,7 +305,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.password != "placeholderPassword") { // if pressed backspace
-					System.out.println("del pressed");
+			
 					if (gp.ui.password.length() > 1) {
 						// Remove the last character from the username
 						gp.ui.password = gp.ui.password.substring(0, gp.ui.password.length() - 1);
@@ -355,7 +358,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.username != "placeholderUsername") { // if pressed backspace
-					System.out.println("del pressed");
+				
 					if (gp.ui.username.length() > 1) {
 						// Remove the last character from the username
 						gp.ui.username = gp.ui.username.substring(0, gp.ui.username.length() - 1);
@@ -377,7 +380,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.password != "placeholderPassword") { // if pressed backspace
-					System.out.println("del pressed");
+			
 					if (gp.ui.password.length() > 1) {
 						// Remove the last character from the username
 						gp.ui.password = gp.ui.password.substring(0, gp.ui.password.length() - 1);
@@ -399,7 +402,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.passwordAgain != "placeholderPasswordAgain") { // if pressed backspace
-					System.out.println("del pressed");
+					
 					if (gp.ui.passwordAgain.length() > 1) {
 						// Remove the last character from the username
 						gp.ui.passwordAgain = gp.ui.passwordAgain.substring(0, gp.ui.passwordAgain.length() - 1);
@@ -420,7 +423,7 @@ public class KeyHandler implements KeyListener { // KeyListener is the interface
 					}
 
 				} else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.security != "placeholderSecurity") { // if pressed backspace
-					System.out.println("del pressed");
+			
 					if (gp.ui.security.length() > 1) {
 						// Remove the last character from the username
 						gp.ui.security = gp.ui.security.substring(0, gp.ui.security.length() - 1);

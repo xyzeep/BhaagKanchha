@@ -25,8 +25,7 @@ public class Database {
 		try {
 
 			connection = DriverManager.getConnection(URL); // get connection
-			System.out.println("sqlite db connected");
-			System.out.println(todayDate + "");
+	
 		} catch (SQLException e) { // if something happens catch it
 			System.err.println("couldn't connect to sqlite db");
 			e.printStackTrace();
@@ -42,14 +41,13 @@ public class Database {
 		if (gp.ui.username == "placeholderUsername" || gp.ui.password == "placeholderPassword"
 				|| gp.ui.passwordAgain == "placeholderPasswordAgain" || gp.ui.security == "placeholderSecurity") {
 			gp.ui.errorMessage = "Please fill all input fields.";
-
 			return;
 		}
 
 		// invalid input format (we have restricted some key inputs in specific inputs
 		// but still)
 		if (!gp.ui.username.matches("[a-zA-Z0-9_]+")) {
-			gp.ui.errorMessage = "Username can only have letters and numbers.";
+			gp.ui.errorMessage = "Invalid Username";
 			return;
 		}
 
@@ -61,12 +59,12 @@ public class Database {
 
 		// checking username length
 		if (gp.ui.username.length() > 19) {
-			gp.ui.errorMessage = "Username should not contain more than 19 characters.";
+			gp.ui.errorMessage = "Username too long.";
 			return;
 		}
 		// checking password length
 		if (gp.ui.password.length() < 8) {
-			gp.ui.errorMessage = "Password should contain at least 8 characters.";
+			gp.ui.errorMessage = "Password too short.";
 			return;
 		} else if (gp.ui.password.length() > 19) {
 			gp.ui.errorMessage = "Password too long.";
@@ -82,8 +80,9 @@ public class Database {
 
 			// CHECK IF THAT USER EXISTS
 			if (resultSet.getInt(1) > 0) {
-				System.out.println("no. duplicates: " + resultSet.getInt(1));
-				gp.ui.errorMessage = "Someone has already taken that username";
+		
+				gp.ui.errorMessage = "Username already taken.";
+				gp.ui.commandNum = 0;
 				connection.close();
 				return;
 			}
@@ -120,114 +119,133 @@ public class Database {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	public void login() {
 		// CHECKING POSSIBLE ERRORS
 
-		// missing inputs error
-		if (gp.ui.username == "placeholderUsername" || gp.ui.password == "placeholderPassword") {
+		// Missing inputs error
+		if (gp.ui.username.equals("placeholderUsername") || gp.ui.password.equals("placeholderPassword")) {
 			gp.ui.errorMessage = "Please fill all input fields.";
 			return;
 		}
 
-		Connection connection = connectToDatabase(); // connect to db
+		Connection connection = connectToDatabase(); // Connect to database
 
-		// check if user exists
-		String query = "SELECT COUNT(*) FROM Players WHERE username = ?";
-		try (PreparedStatement checkIfExists = connection.prepareStatement(query)) {
-			checkIfExists.setString(1, gp.ui.username);
-			ResultSet resultSet = checkIfExists.executeQuery();
+		// Check if user exists
+		String query = "SELECT playerID, password FROM Players WHERE username = ?";
+		try (PreparedStatement checkUser = connection.prepareStatement(query)) {
+			checkUser.setString(1, gp.ui.username);
+			ResultSet resultSet = checkUser.executeQuery();
 
-			resultSet = checkIfExists.executeQuery();
+			if (resultSet.next()) { // If user exists
+				String storedPassword = resultSet.getString("password");
+				if (storedPassword.equals(gp.ui.password)) { // Check if password matches
+	
 
-			// is exists
-			if (resultSet.getInt(1) > 0) {
-				System.out.println("user exists");
+					// Set logged-in user's ID as currentUserID
+					gp.currentUserID = String.valueOf(resultSet.getInt("playerID"));
+					gp.currentUsername = gp.ui.username;
+
+					// Reset input fields
+					gp.ui.resetInputFields();
+					gp.config.saveConfig(); // Save config
+					System.out.println("config dave bhayo");
+					gp.config.loadConfig();
+					gp.ui.commandNum = 0;
+					gp.ui.cursorZoom = 0; // to fix a bug(log out appearing bigger)
+					gp.gameState = gp.titleState;
+				} else {
+					gp.ui.errorMessage = "Incorrect password. Try again.";
+				}
 			} else {
 				gp.ui.errorMessage = "User " + gp.ui.username + " doesn't exist.";
-				connection.close();
-				return;
 			}
-
 		} catch (SQLException e) {
-			System.err.println("Something unexpected happened while checking if user exists: " + e.getMessage());
+			System.err.println("Error while logging in: " + e.getMessage());
 			e.printStackTrace();
-			return;
-		}
-
-		// check if password matches
-		query = "SELECT password FROM Players WHERE username = ?";
-		try (PreparedStatement passwordMatch = connection.prepareStatement(query)) {
-			passwordMatch.setString(1, gp.ui.username);
-			ResultSet resultSet = passwordMatch.executeQuery();
-
-			resultSet = passwordMatch.executeQuery();
-
-			// is password matches
-			if (resultSet.getString(1).equals(gp.ui.password)) {
-				System.out.println("password matched");
-				gp.ui.resetInputFields();
-				gp.currentUserID = "1";
-				gp.gameState = gp.titleState;
-				gp.config.saveConfig(); // config is saved
-				gp.config.loadConfig();
-
-			} else {
-				gp.ui.errorMessage = "Incorrect password. Please try again.";
-				connection.close();
-				return;
-			}
-
-		} catch (SQLException e) {
-			System.err
-					.println("Something unexpected happened while checking if the password matches: " + e.getMessage());
-			e.printStackTrace();
-			return;
-		} finally {
-			try {
-				if (connection != null && !connection.isClosed()) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					if (connection != null && !connection.isClosed()) {
-						connection.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
 	public void logout() {
-		gp.gameState = gp.loginState;
 		gp.currentUserID = null;
 		gp.config.saveConfig(); // config is saved
+		gp.gameState = gp.loginState;
 	}
 
 	public String getUsername() {
-		Connection connection = connectToDatabase();
+		if (gp.currentUserID == null || gp.currentUserID.isEmpty()) {
+			return null;
+		}
+
 		String query = "SELECT username FROM Players WHERE playerID = ?";
-		try (PreparedStatement gettingUsername = connection.prepareStatement(query)) {
+		try (Connection connection = connectToDatabase();
+				PreparedStatement gettingUsername = connection.prepareStatement(query)) {
+
 			gettingUsername.setString(1, gp.currentUserID);
 			ResultSet resultSet = gettingUsername.executeQuery();
 
-			resultSet = gettingUsername.executeQuery();
+			if (resultSet.next()) {
+				String username = resultSet.getString("username");
+	
+				return username;
+			} else {
+				System.err.println("No username found for playerID: " + gp.currentUserID);
+				return null;
+			}
 
-			
-			return resultSet.getString(1); // returns username
 		} catch (SQLException e) {
-			System.err
-					.println("Something unexpected happened while checking if the password matches: " + e.getMessage());
+			System.err.println("Error while retrieving username: " + e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
 	}
+
+	public int getPlayerID(String username) {
+		Connection connection = connectToDatabase();
+		String query = "SELECT playerID FROM Players WHERE username = ?";
+		try (PreparedStatement gettingID = connection.prepareStatement(query)) {
+			gettingID.setString(1, username);
+			ResultSet resultSet = gettingID.executeQuery();
+			resultSet.next();
+			return resultSet.getInt(1); // returns id
+
+		} catch (SQLException e) {
+			System.err
+					.println("Something unexpected happened while checking if the password matches: " + e.getMessage());
+			e.printStackTrace();
+			return -1;
+		}
+	}
 	
+	public void storeGameData(String  playerID, int mapID, int score) {
+
+	    String query = "INSERT INTO completedGames (playerID, mapID, score, gameDate) VALUES (?, ?, ?, ?)";
+
+	  
+	    try (Connection connection = connectToDatabase();
+	         PreparedStatement stmt = connection.prepareStatement(query)) {
+
+
+	        stmt.setString(1, playerID);    
+	        stmt.setInt(2, mapID);       
+	        stmt.setInt(3, score);       
+	        stmt.setString(4, todayDate + ""); 
+
+	
+	        int rowsAffected = stmt.executeUpdate();
+
+	        // Check if the data was inserted successfully
+	        if (rowsAffected > 0) {
+	            System.out.println("Game data successfully stored!");
+	        } else {
+	            System.out.println("Failed to store game data.");
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.println("Error while storing game data: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
 
 }
