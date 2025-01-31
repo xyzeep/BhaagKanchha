@@ -48,26 +48,31 @@ public class Database {
 		// but still)
 		if (!gp.ui.username.matches("[a-zA-Z0-9_]+")) {
 			gp.ui.errorMessage = "Invalid Username";
+			gp.ui.commandNum = 0;
 			return;
 		}
 
 		// password not matching retyped password
 		if (!gp.ui.password.equals(gp.ui.passwordAgain)) {
 			gp.ui.errorMessage = "Passwords didn't match.";
+			gp.ui.commandNum = 1;
 			return;
 		}
 
 		// checking username length
 		if (gp.ui.username.length() > 19) {
 			gp.ui.errorMessage = "Username too long.";
+			gp.ui.commandNum = 0;
 			return;
 		}
 		// checking password length
 		if (gp.ui.password.length() < 8) {
 			gp.ui.errorMessage = "Password too short.";
+			gp.ui.commandNum = 1;
 			return;
 		} else if (gp.ui.password.length() > 19) {
 			gp.ui.errorMessage = "Password too long.";
+			gp.ui.commandNum = 1;
 			return;
 		}
 
@@ -104,6 +109,8 @@ public class Database {
 			int rowsAffected = pStatement.executeUpdate();
 			if (rowsAffected > 0) {
 				gp.gameState = gp.loginState;
+				gp.ui.errorMessage = "You are registered now.";
+				gp.ui.commandNum = 0;
 				gp.ui.resetInputFields();
 			} else {
 				gp.ui.errorMessage = "Invalid Signup";
@@ -127,6 +134,7 @@ public class Database {
 		// Missing inputs error
 		if (gp.ui.username.equals("placeholderUsername") || gp.ui.password.equals("placeholderPassword")) {
 			gp.ui.errorMessage = "Please fill all input fields.";
+			gp.ui.commandNum = 0;
 			return;
 		}
 
@@ -150,16 +158,17 @@ public class Database {
 					// Reset input fields
 					gp.ui.resetInputFields();
 					gp.config.saveConfig(); // Save config
-					System.out.println("config dave bhayo");
 					gp.config.loadConfig();
 					gp.ui.commandNum = 0;
 					gp.ui.cursorZoom = 0; // to fix a bug(log out appearing bigger)
 					gp.gameState = gp.titleState;
 				} else {
 					gp.ui.errorMessage = "Incorrect password. Try again.";
+					gp.ui.commandNum = 1;
 				}
 			} else {
 				gp.ui.errorMessage = "User " + gp.ui.username + " doesn't exist.";
+				gp.ui.commandNum = 0;
 			}
 		} catch (SQLException e) {
 			System.err.println("Error while logging in: " + e.getMessage());

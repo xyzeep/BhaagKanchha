@@ -46,7 +46,7 @@ public class TileManager {
 
 		setup(1, "platformTop", true, false);
 
-		setup(2, "spike1", true, true);
+		setup(2, "spike1", false, true);
 
 		setup(3, "lava", true, true);
 
@@ -55,6 +55,10 @@ public class TileManager {
 		setup(5, "apple", false, false);
 
 		setup(6, "crate", true, false);
+		
+		setup(7, "platformRight", true, false);
+		
+		setup(8, "platformLeft", true, false);
 
 	}
 

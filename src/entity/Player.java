@@ -19,7 +19,7 @@ public class Player extends Entity {
 	private int jumpCounter = 0;
 	boolean takeDamage = true;
 	int damageCounter = 0;
-	int damageInterval = 16;
+	int damageInterval = 8;
 
 	public Player(GamePanel gp, KeyHandler keyH) {
 
@@ -162,7 +162,6 @@ public class Player extends Entity {
 
 		if (life <= 0) {
 			gp.gameState = gp.gameOverState;
-			System.out.println("Game Over");
 			gp.stopMusic();
 		}
 

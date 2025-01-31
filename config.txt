@@ -1,4 +1,4 @@
 currentUserID: 9
 FullScreen: Off
-Music: 2
+Music: 1
 Sound: 2

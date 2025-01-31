@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable { // this class inheri
 	public double timeToComplete = 0;
 
 	// LEVEL MAP SETTINGS
-	public final int maxWorldCol = 164; // Please change this later as you make bigger maps pawan
+	public final int maxWorldCol = 156; // Please change this later as you make bigger maps pawan
 	public final int maxWorldRow = 12; // We wont have to change this ig because this will be fixed
 
 	// dont think these two are necessary (until now at least)

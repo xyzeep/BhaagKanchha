@@ -322,7 +322,6 @@ public class UI {
 		// reset
 		gp.keyH.enterPressed = false;
 
-		System.out.println("In login");
 	}
 
 	public void drawSignupScreen() {
@@ -1015,7 +1014,14 @@ public class UI {
 		g2.fillPolygon(xPoints, yPoints, 3);
 
 		// bubble border
-		g2.setColor(new Color(180, 0, 0));
+		
+		if (errorMessage == "You are registered now.") {
+			g2.setColor(new Color(80, 200, 120));
+		} else {
+			g2.setColor(new Color(180, 0, 0));
+		}
+		
+		
 		g2.setStroke(new BasicStroke(4));
 		g2.drawRoundRect(x, y, width, height, 20, 20);
 		g2.drawPolygon(xPoints, yPoints, 3);
