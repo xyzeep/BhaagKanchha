@@ -1001,7 +1001,7 @@ public class UI {
 //	    int padding = 5;
 		int x = 10;
 		int y = kanchhaImageY - 120; // Y-position
-		int width = 300;
+		int width = 350;
 		int height = 60;
 		int tailSize = 20;
 

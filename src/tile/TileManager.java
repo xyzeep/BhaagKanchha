@@ -52,7 +52,7 @@ public class TileManager {
 
 		setup(4, "platformBlock", true, false);
 
-		setup(5, "apple", false, false);
+		setup(5, "Empty", false, false);
 
 		setup(6, "crate", true, false);
 		

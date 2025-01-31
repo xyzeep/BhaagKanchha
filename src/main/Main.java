@@ -1,5 +1,6 @@
 package main;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class Main {
@@ -13,6 +14,10 @@ public class Main {
 		window.setResizable(false);
 		window.setTitle("Bhaag Kanchha");
 
+		
+        ImageIcon icon = new ImageIcon(Main.class.getResource("/player/icon.png"));
+        window.setIconImage(icon.getImage());
+		
 		GamePanel gamePanel = new GamePanel();
 
 		window.add(gamePanel); // adding a GamePanel wwwclass to the window
