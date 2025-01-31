@@ -47,6 +47,7 @@ public class Player extends Entity {
 	// fucntion to set default valuesd
 	public void setDefaultValues() {
 		worldX = gp.tileSize * 4;
+		screenY = (gp.tileSize * 5);
 		worldY = screenY;
 		speed = 5;
 		jumpSpeed = 6;
@@ -72,7 +73,8 @@ public class Player extends Entity {
 		sideCollision = false;
 		upDownCollision = false;
 		canJump = false;
-
+		
+	
 		// CHECK FOR sideCollision, collisionOn, and canJump
 		gp.cChecker.checkTile(this); // checks for collisionOn and canJump
 
@@ -153,7 +155,7 @@ public class Player extends Entity {
 			}
 		}
 
-		if (worldX >= 7580) {
+		if (worldX >= 7365 && screenY >= 240) {
 			gp.stopMusic();
 			gp.playSoundEffect(4);
 			gp.db.storeGameData(gp.currentUserID, 1, ((int) gp.timeToComplete / 10));
@@ -223,7 +225,8 @@ public class Player extends Entity {
 	public void draw(Graphics2D g2) {
 
 		BufferedImage image = null;
-
+	
+		
 		switch (horizontalDirection) {
 		// depending on the direction(jumping or not) change the sprites + its animation
 		case "left":

@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.CharsetDecoder;
 import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;

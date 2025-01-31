@@ -1,4 +1,4 @@
-currentUserID: 9
+currentUserID: null
 FullScreen: Off
 Music: 1
 Sound: 2
