@@ -246,9 +246,9 @@ public class Database {
 
 	        // Check if the data was inserted successfully
 	        if (rowsAffected > 0) {
-	            System.out.println("Game data successfully stored!");
+//	            System.out.println("game data successfully stored");
 	        } else {
-	            System.out.println("Failed to store game data.");
+//	            System.out.println("failed to store game data.");
 	        }
 
 	    } catch (SQLException e) {

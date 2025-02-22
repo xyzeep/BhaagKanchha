@@ -155,8 +155,11 @@ public class UI {
 		int x = gp.tileSize * 19 + 5;
 		int y = gp.tileSize - 10;
 		String text = "" + gp.currentFPS;
-
-		if (gp.currentFPS < 60 && gp.currentFPS > 55) {
+		
+		if (gp.currentFPS > 59) {
+			g2.setColor(Color.GREEN);
+		}
+		else if (gp.currentFPS <= 59 && gp.currentFPS > 55) {
 			g2.setColor(Color.yellow);
 		} else if (gp.currentFPS <= 55) {
 			g2.setColor(Color.RED);

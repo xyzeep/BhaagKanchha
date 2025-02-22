@@ -20,7 +20,7 @@ public class Main {
 		
 		GamePanel gamePanel = new GamePanel();
 
-		window.add(gamePanel); // adding a GamePanel wwwclass to the window
+		window.add(gamePanel); // adding a GamePanel class to the window
 		gamePanel.config.loadConfig();
 		if (gamePanel.fullScreenOn == true) {
 			window.setUndecorated(true); // clean look
